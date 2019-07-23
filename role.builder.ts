@@ -1,6 +1,8 @@
 import { ICreep } from './enums';
 import { harvestSourceBasedOfIndex, log } from './utils';
 
+const buildingPriorities = ['tower', 'extension', 'road'].reverse();
+
 export function builderAI(creep: ICreep, index: number) {
    if (creep.memory.building && creep.carry.energy == 0) {
       creep.memory.building = false;
@@ -14,13 +16,15 @@ export function builderAI(creep: ICreep, index: number) {
    if (creep.memory.building) {
       var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
-      const bestTargets = targets.sort((a, b) => {
-         return 0;
-      });
+      const bestTargets = targets.sort(
+         (a, b) =>
+            buildingPriorities.indexOf(b.structureType) -
+            buildingPriorities.indexOf(a.structureType)
+      );
 
       if (bestTargets.length) {
          log(
-            `${bestTargets.length} construction site(s) pending`,
+            `${bestTargets.length} constructions site(s):`,
             bestTargets.map(s => s.structureType).join(', ')
          );
          if (creep.build(bestTargets[0]) == ERR_NOT_IN_RANGE) {
