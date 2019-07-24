@@ -1,10 +1,25 @@
-export function turretAI() {
-   const tower = Game.getObjectById(
-      '5d37a055e9ffb93fbdf89a6a'
-   ) as StructureTower;
+import { findStructureAroundSpawn, log } from './utils';
 
-   if (tower) {
-      var closestDamagedStructure = tower.pos.findClosestByRange(
+export function turretAI() {
+   findStructureAroundSpawn('Spawn1', STRUCTURE_TOWER).forEach(tower => {
+      const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+      if (closestHostile) {
+         if (tower.energy) {
+            log(tower.id, 'attacking', closestHostile);
+         } else {
+            log(
+               tower.id,
+               'warning: cannot attack',
+               closestHostile,
+               'not enough energy'
+            );
+         }
+         tower.attack(closestHostile);
+         return;
+      }
+
+      // if not at war, it contributes
+      const closestDamagedStructure = tower.pos.findClosestByRange(
          FIND_STRUCTURES,
          {
             filter: structure => structure.hits < structure.hitsMax,
@@ -13,10 +28,5 @@ export function turretAI() {
       if (closestDamagedStructure) {
          tower.repair(closestDamagedStructure);
       }
-
-      var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-      if (closestHostile) {
-         tower.attack(closestHostile);
-      }
-   }
+   });
 }

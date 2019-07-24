@@ -14,7 +14,7 @@ export function loop() {
       const creep = Game.creeps[name] as ICreep;
       const updateFn = roles[creep.memory.role];
 
-      if (Math.random() > 0.8) {
+      if (Math.random() > 0.9) {
          creep.say(`${creep.memory.role}`);
       }
 

@@ -1,4 +1,4 @@
-import { log, findCreepByRole } from './utils';
+import { findCreepByRole } from './utils';
 import { TRole } from './enums';
 import { creepPresets } from './config';
 

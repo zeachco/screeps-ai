@@ -1,7 +1,18 @@
-import { harvestSourceBasedOfIndex } from './utils';
+import { harvestSourceBasedOfIndex, log } from './utils';
 import { ICreep } from './enums';
 
 export function fighterAI(creep: ICreep, index: number) {
+   const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+   if (closestHostile) {
+      if (creep.carry.energy) {
+         log('attacking', closestHostile);
+      } else {
+         log('warning: cannot attack', closestHostile, 'not enough energy');
+      }
+      creep.attack(closestHostile);
+      return;
+   }
+
    const closestDamagedStructure = creep.pos.findClosestByRange(
       FIND_STRUCTURES,
       {
@@ -10,11 +21,6 @@ export function fighterAI(creep: ICreep, index: number) {
    );
    if (closestDamagedStructure) {
       creep.repair(closestDamagedStructure);
-   }
-
-   const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-   if (closestHostile) {
-      creep.attack(closestHostile);
    }
 
    if (creep.memory.upgrading && creep.carry.energy == 0) {
