@@ -13,12 +13,11 @@ export function harvestSourceBasedOfIndex(creep: Creep, index: number) {
    }
 }
 
-export function log(...arg) {
+export function log(...arg: any[]) {
    console.log(...arg);
 }
 
 export function clean() {
-   log('---');
    for (var name in Memory.creeps) {
       if (!Game.creeps[name]) {
          delete Memory.creeps[name];
@@ -28,7 +27,7 @@ export function clean() {
 }
 
 export function findCreepByRole(role: TRole) {
-   return Object.keys(Game.creeps)
-      .map(key => Game.creeps[key])
-      .filter((creep: ICreep) => creep.memory.role == role);
+   return (Object.keys(Game.creeps) as TRole[])
+      .map(key => Game.creeps[key] as ICreep)
+      .filter(creep => creep.memory.role == role);
 }

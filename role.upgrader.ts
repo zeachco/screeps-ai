@@ -13,8 +13,11 @@ export function upgraderAI(creep: ICreep, index: number) {
    }
 
    if (creep.memory.upgrading) {
-      if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-         creep.moveTo(creep.room.controller, {
+      if (
+         creep.upgradeController(creep.room
+            .controller as StructureController) == ERR_NOT_IN_RANGE
+      ) {
+         creep.moveTo(creep.room.controller as StructureController, {
             visualizePathStyle: { stroke: '#ffffff' },
          });
       }
