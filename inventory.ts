@@ -1,69 +1,42 @@
-import { findCreepByRole, log } from './utils';
-import { TRole } from './enums';
-import { creepPresets } from './config';
+import { log } from './utils';
 
-let id = 0;
-const CREEPS_PER_TIERS = 2;
+const CREEPS_PER_TIERS = 3;
+const MAX_CREEPS = 30;
 
-const ALL_USAGE_T1 = [RANGED_ATTACK, WORK, CARRY, ATTACK, MOVE];
-const ALL_USAGE_T2 = [MOVE, RANGED_ATTACK, WORK, CARRY, ATTACK, MOVE];
-const ALL_USAGE_T3 = [MOVE, RANGED_ATTACK, WORK, WORK, CARRY, ATTACK, MOVE];
-const ALL_USAGE_T4 = [
-   MOVE,
-   MOVE,
-   RANGED_ATTACK,
-   WORK,
-   WORK,
-   CARRY,
-   ATTACK,
-   MOVE,
-];
-
-export const ALL_USAGE_ALL = [
-   ALL_USAGE_T1,
-   ALL_USAGE_T2,
-   ALL_USAGE_T3,
-   ALL_USAGE_T4,
+const BODY_TIERS = [
+   [WORK, CARRY, MOVE],
+   [RANGED_ATTACK, WORK, CARRY, MOVE],
+   [RANGED_ATTACK, WORK, WORK, CARRY, MOVE],
+   [WORK, WORK, MOVE, MOVE, CARRY, MOVE],
 ];
 
 export function updateInventory() {
-   (Object.keys(creepPresets) as TRole[]).forEach((role) => {
-      const creeps = findCreepByRole(role);
-      const config = creepPresets[role];
-      if (creeps.length < config.nb) {
-         const bodyIndex = Math.round(
-            Math.min(creeps.length / CREEPS_PER_TIERS, config.body.length) - 1
+   const creeps = Object.keys(Game.creeps).map((name) => Game.creeps[name]);
+
+   if (creeps.length < MAX_CREEPS) {
+      const bodyIndex = Math.min(
+         Math.floor(creeps.length / CREEPS_PER_TIERS),
+         BODY_TIERS.length - 1
+      );
+
+      const newName = `T${bodyIndex + 1}-${Game.time}`;
+
+      const result = Game.spawns['Spawn1'].spawnCreep(
+         BODY_TIERS[bodyIndex],
+         newName,
+         { memory: {} }
+      );
+
+      if (result === OK) {
+         log(`${newName} created`, BODY_TIERS[bodyIndex]);
+      } else if (result === ERR_NOT_ENOUGH_ENERGY) {
+         log(
+            `need ${BODY_TIERS[bodyIndex].length * 100}$ for a T${bodyIndex +
+               1}`,
+            BODY_TIERS[bodyIndex]
          );
-
-         const newName =
-            role === 'polyrole'
-               ? `T${bodyIndex + 1}-${id}`
-               : `${role}_${Game.time}`;
-
-         if (id > 99) {
-            id = 0;
-         }
-
-         const spawnAtempt = Game.spawns['Spawn1'].spawnCreep(
-            config.body[bodyIndex],
-            newName,
-            {
-               memory: { role },
-            }
-         );
-
-         if (spawnAtempt === ERR_NOT_ENOUGH_ENERGY) {
-            log(
-               `need ${config.body[bodyIndex].length *
-                  100}$ for a T${bodyIndex + 1}`,
-               config.body[bodyIndex]
-            );
-         } else if (spawnAtempt === OK) {
-            log(`${newName} created`, config.body[bodyIndex]);
-            id++;
-         }
-      } else if (creeps.length > config.nb) {
-         creeps[0].suicide();
+      } else if (result !== ERR_BUSY) {
+         log(`Failed to create creep with error ${result}`);
       }
-   });
+   }
 }

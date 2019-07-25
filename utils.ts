@@ -1,4 +1,4 @@
-import { ICreep, TRole } from './enums';
+import { ICreep } from './enums';
 
 export const random = (max: number, min = 0) =>
    Math.round(Math.random() * (max - min));
@@ -27,12 +27,6 @@ export function clean() {
          console.log('Clearing non-existing creep memory:', name);
       }
    }
-}
-
-export function findCreepByRole(role: TRole) {
-   return (Object.keys(Game.creeps) as TRole[])
-      .map((key) => Game.creeps[key] as ICreep)
-      .filter((creep) => creep.memory.role == role);
 }
 
 export const findStructureAroundSpawn = (

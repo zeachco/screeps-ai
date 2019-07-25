@@ -104,7 +104,7 @@ const aiStoreEnergy = (creep: ICreep) => {
 const aiUpgrade = (creep: ICreep) => {
    if (
       !creep.carry.energy ||
-      getStats().upgrade.length > getStats().store.length / 3
+      getStats().upgrade.length >= getStats().store.length / 3
    ) {
       return false;
    }
@@ -125,7 +125,7 @@ const aiUpgrade = (creep: ICreep) => {
 const aiBuild = (creep: ICreep) => {
    if (
       !creep.carry.energy ||
-      getStats().build.length > getStats().store.length / 2
+      getStats().build.length >= getStats().upgrade.length
    ) {
       return false;
    }
@@ -184,8 +184,8 @@ export const scriptsMap: {
 } = {
    defend: aiDefendFromHostiles,
    harvest: aiGetEnergy,
-   upgrade: aiUpgrade,
    build: aiBuild,
+   upgrade: aiUpgrade,
    repair: aiRepair,
    store: aiStoreEnergy,
    derp: aiDerp,
