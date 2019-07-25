@@ -9,17 +9,28 @@ const qualifiesFor = (creep: ICreep, partsRequired: BodyPartConstant[]) =>
    );
 
 const aiDefendFromHostiles = (creep: ICreep) => {
-   if (qualifiesFor(creep, [ATTACK])) {
-      const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-      if (closestHostile) {
-         if (creep.carry.energy) {
-            log('attacking', closestHostile);
-         } else {
-            log('warning: cannot attack', closestHostile, 'not enough energy');
-         }
-         creep.attack(closestHostile);
-         return true;
+   const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+   if (closestHostile) {
+      if (creep.carry.energy) {
+         log('attacking', closestHostile);
+      } else {
+         log('warning: cannot attack', closestHostile, 'not enough energy');
       }
+      creep.attack(closestHostile);
+
+      const atemptAtk = (atkType: RANGED_ATTACK | ATTACK) => {
+         if (qualifiesFor(creep, [atkType])) {
+            const fn =
+               atkType === RANGED_ATTACK ? creep.rangedAttack : creep.attack;
+            if (fn(closestHostile) === ERR_NOT_IN_RANGE) {
+               creep.moveTo(closestHostile);
+            }
+            return true;
+         }
+         return false;
+      };
+
+      return atemptAtk(RANGED_ATTACK) || atemptAtk(ATTACK);
    }
    return false;
 };
@@ -127,6 +138,10 @@ const aiBuild = (creep: ICreep) => {
    );
 
    if (closestSite) {
+      if (creep.memory.activeScript !== 'build') {
+         creep.say(`🔨 build ${closestSite.structureType}`);
+      }
+
       if (creep.build(closestSite) === ERR_NOT_IN_RANGE) {
          creep.moveTo(closestSite);
       }
