@@ -77,7 +77,7 @@ const aiGetEnergy = (creep: ICreep, index: number) => {
 };
 
 const aiStoreEnergy = (creep: ICreep, index: number, total: number) => {
-   if (!creep.carry.energy || getStats().store.length > 1) {
+   if (!creep.carry.energy) {
       return false;
    }
    const byPriority = (str: Structure) =>
@@ -172,7 +172,7 @@ const aiRepair = (creep: ICreep) => {
 };
 
 const aiDerp = (creep: ICreep) => {
-   creep.say('I do not know what to do 🤪');
+   creep.say('ikdwtd 🤪');
    return true;
 };
 
@@ -184,9 +184,9 @@ export const scriptsMap: {
    defend: aiDefendFromHostiles,
    harvest: aiGetEnergy,
    upgrade: aiUpgrade,
-   store: aiStoreEnergy,
    build: aiBuild,
    repair: aiRepair,
+   store: aiStoreEnergy,
    derp: aiDerp,
 };
 
