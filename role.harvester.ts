@@ -14,7 +14,7 @@ export function harvesterAI(creep: ICreep, index: number) {
    } else {
       const lowestTurret = findStructureAroundSpawn('Spawn1', STRUCTURE_TOWER)
          .sort((a, b) => a.energy - b.energy)
-         .filter(turret => turret.energy < turret.energyCapacity)[0];
+         .filter((turret) => turret.energy < turret.energyCapacity)[0];
 
       if (lowestTurret) {
          if (
@@ -26,7 +26,7 @@ export function harvesterAI(creep: ICreep, index: number) {
          }
       } else {
          const targets = creep.room.find(FIND_STRUCTURES, {
-            filter: structure => {
+            filter: (structure) => {
                return (
                   (structure.structureType == STRUCTURE_EXTENSION ||
                      structure.structureType == STRUCTURE_SPAWN ||
@@ -35,7 +35,7 @@ export function harvesterAI(creep: ICreep, index: number) {
                );
             },
          });
-         if (targets.length > 0) {
+         if (targets.length) {
             if (
                creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
             ) {

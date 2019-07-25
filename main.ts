@@ -1,11 +1,13 @@
 import { updateInventory } from './inventory';
-import { clean } from './utils';
+import { clean, log } from './utils';
 import { ICreep } from './enums';
 import { roles } from './roles';
 import { turretAI } from './role.turret';
+import { resetStats, getStats } from './creepAI';
 
 export function loop() {
    clean();
+   resetStats();
    updateInventory();
    turretAI();
 
@@ -13,10 +15,6 @@ export function loop() {
    for (var name in Game.creeps) {
       const creep = Game.creeps[name] as ICreep;
       const updateFn = roles[creep.memory.role];
-
-      if (Math.random() > 0.9) {
-         creep.say(`${creep.memory.role}`);
-      }
 
       if (updateFn) {
          updateFn(creep, index++);
@@ -29,4 +27,7 @@ export function loop() {
          creep.suicide();
       }
    }
+
+   log(JSON.stringify(getStats(), null, 2));
+   log('---');
 }

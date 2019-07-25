@@ -1,5 +1,8 @@
 import { ICreep, TRole } from './enums';
 
+export const random = (max: number, min = 0) =>
+   Math.round(Math.random() * (max - min));
+
 export function harvestSourceBasedOfIndex(creep: Creep, index: number) {
    const sources = creep.room.find(FIND_SOURCES);
    const selectIndex = index % sources.length;
@@ -28,8 +31,8 @@ export function clean() {
 
 export function findCreepByRole(role: TRole) {
    return (Object.keys(Game.creeps) as TRole[])
-      .map(key => Game.creeps[key] as ICreep)
-      .filter(creep => creep.memory.role == role);
+      .map((key) => Game.creeps[key] as ICreep)
+      .filter((creep) => creep.memory.role == role);
 }
 
 export const findStructureAroundSpawn = (
@@ -54,4 +57,4 @@ export const findStructureAroundSpawn = (
    return towers;
 };
 
-export const getBodyParts = (creep: ICreep) => creep.body.map(b => b.type);
+export const getBodyParts = (creep: ICreep) => creep.body.map((b) => b.type);

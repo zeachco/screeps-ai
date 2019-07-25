@@ -6,11 +6,9 @@ const buildingPriorities = ['tower', 'extension', 'road'].reverse();
 export function builderAI(creep: ICreep, index: number) {
    if (creep.memory.building && creep.carry.energy == 0) {
       creep.memory.building = false;
-      creep.say('🔄 harvest');
    }
    if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
       creep.memory.building = true;
-      creep.say('🚧 build');
    }
 
    if (creep.memory.building) {
@@ -25,7 +23,7 @@ export function builderAI(creep: ICreep, index: number) {
       if (bestTargets.length) {
          log(
             `${bestTargets.length} constructions site(s):`,
-            bestTargets.map(s => s.structureType).join(', ')
+            bestTargets.map((s) => s.structureType).join(', ')
          );
          if (creep.build(bestTargets[0]) == ERR_NOT_IN_RANGE) {
             creep.moveTo(bestTargets[0], {

@@ -4,5 +4,6 @@
    "prettier.trailingComma": "es5",
    "prettier.tslintIntegration": true,
    "editor.tabSize": 3,
-   "prettier.tabWidth": 3
+   "prettier.tabWidth": 3,
+   "prettier.arrowParens": "always"
 }
