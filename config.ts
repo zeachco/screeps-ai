@@ -1,7 +1,9 @@
-export const energyStructureByOrder = [
+type TPowerStructures = STRUCTURE_SPAWN | STRUCTURE_TOWER | STRUCTURE_EXTENSION;
+
+export const energyStructureByOrder: TPowerStructures[] = [
    STRUCTURE_TOWER,
    STRUCTURE_SPAWN,
    STRUCTURE_EXTENSION,
-   STRUCTURE_CONTAINER,
-   STRUCTURE_POWER_BANK,
-] as StructureConstant[];
+   // STRUCTURE_CONTAINER,
+   // STRUCTURE_POWER_BANK,
+];

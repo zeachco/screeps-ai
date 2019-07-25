@@ -11,10 +11,10 @@ export function loop() {
    turretAI();
 
    let index = 0;
-   for (var name in Game.creeps) {
-      const creep = Game.creeps[name] as ICreep;
-      creepAI(creep, index);
-   }
+   Object.keys(Game.creeps).forEach((key, index, all) => {
+      creepAI(Game.creeps[key] as ICreep, index, all.length);
+   });
 
-   // log(JSON.stringify(getStats(), null, 2));
+   log(JSON.stringify(getStats(), null, 2));
+   log('---');
 }

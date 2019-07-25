@@ -1,8 +1,8 @@
-import { harvestSourceBasedOfIndex, log } from './utils';
+import { log } from './utils';
 import { ICreep } from './enums';
 import { energyStructureByOrder } from './config';
 
-const qualifiesFor = (creep: ICreep, partsRequired: BodyPartConstant[]) =>
+const doesCreepCan = (creep: ICreep, partsRequired: BodyPartConstant[]) =>
    partsRequired.reduce(
       (ok, part) => ok && creep.body.map((b) => b.type).indexOf(part) !== -1,
       true
@@ -19,7 +19,7 @@ const aiDefendFromHostiles = (creep: ICreep) => {
       creep.attack(closestHostile);
 
       const atemptAtk = (atkType: RANGED_ATTACK | ATTACK) => {
-         if (qualifiesFor(creep, [atkType])) {
+         if (doesCreepCan(creep, [atkType])) {
             const fn =
                atkType === RANGED_ATTACK ? creep.rangedAttack : creep.attack;
             if (fn(closestHostile) === ERR_NOT_IN_RANGE) {
@@ -35,14 +35,17 @@ const aiDefendFromHostiles = (creep: ICreep) => {
    return false;
 };
 
-const aiGetEnergy = (creep: ICreep) => {
-   if (creep.carry.energy === creep.carryCapacity) {
+const aiGetEnergy = (creep: ICreep, index: number) => {
+   if (
+      creep.carry.energy === creep.carryCapacity ||
+      !doesCreepCan(creep, [CARRY])
+   ) {
       return false;
    }
 
    if (creep.memory.activeScript !== 'harvest') {
       if (!creep.carry.energy) {
-         creep.say(`🔄 harvest`);
+         creep.say(`🤑`);
          return true;
       } else {
          return false;
@@ -60,9 +63,11 @@ const aiGetEnergy = (creep: ICreep) => {
 
    // then get the reserves
    const sources = creep.room.find(FIND_SOURCES);
-   if (sources[0]) {
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-         creep.moveTo(sources[0], {
+   const selectIndex = index % sources.length;
+
+   if (sources[selectIndex]) {
+      if (creep.harvest(sources[selectIndex]) == ERR_NOT_IN_RANGE) {
+         creep.moveTo(sources[selectIndex], {
             visualizePathStyle: { stroke: '#ffaa00' },
          });
       }
@@ -71,25 +76,26 @@ const aiGetEnergy = (creep: ICreep) => {
    return false;
 };
 
-const aiStoreEnergy = (creep: ICreep) => {
-   if (!creep.carry.energy) {
+const aiStoreEnergy = (creep: ICreep, index: number, total: number) => {
+   if (!creep.carry.energy || getStats().store.length > 1) {
       return false;
    }
    const byPriority = (str: Structure) =>
-      energyStructureByOrder.indexOf(str.structureType);
+      energyStructureByOrder.indexOf(str.structureType as any);
 
    const targets = creep.room
       .find(FIND_STRUCTURES, {
          filter: (str) =>
-            energyStructureByOrder.indexOf(str.structureType) !== -1,
+            energyStructureByOrder.indexOf(str.structureType as any) !== -1 &&
+            str.isActive(),
       })
+      // TODO get power structure type (any)
+      .filter((str: any) => str.energy < str.energyCapacity)
       .sort((a, b) => byPriority(a) - byPriority(b));
-
-   log(targets);
 
    if (targets.length) {
       if (creep.memory.activeScript !== 'store') {
-         creep.say(`🔄 storing energy`);
+         creep.say(`🔽`);
       }
       if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
          creep.moveTo(targets[0], {
@@ -102,10 +108,7 @@ const aiStoreEnergy = (creep: ICreep) => {
 };
 
 const aiUpgrade = (creep: ICreep) => {
-   if (
-      !creep.carry.energy ||
-      getStats().upgrade.length >= getStats().store.length / 3
-   ) {
+   if (!creep.carry.energy || getStats().upgrade.length) {
       return false;
    }
    if (
@@ -113,20 +116,17 @@ const aiUpgrade = (creep: ICreep) => {
       ERR_NOT_IN_RANGE
    ) {
       creep.moveTo(creep.room.controller as StructureController, {
-         visualizePathStyle: { stroke: '#ffffff' },
+         visualizePathStyle: { stroke: '#8888ff' },
       });
    }
    if (creep.memory.activeScript !== 'upgrade') {
-      creep.say(`⬆️ upgrading room`);
+      creep.say(`⬆️`);
    }
    return true;
 };
 
-const aiBuild = (creep: ICreep) => {
-   if (
-      !creep.carry.energy ||
-      getStats().build.length >= getStats().upgrade.length
-   ) {
+const aiBuild = (creep: ICreep, index: number, total: number) => {
+   if (!creep.carry.energy || getStats().build.length > 2) {
       return false;
    }
 
@@ -139,11 +139,13 @@ const aiBuild = (creep: ICreep) => {
 
    if (closestSite) {
       if (creep.memory.activeScript !== 'build') {
-         creep.say(`🔨 build ${closestSite.structureType}`);
+         creep.say(`🔨 ${closestSite.structureType}`);
       }
 
       if (creep.build(closestSite) === ERR_NOT_IN_RANGE) {
-         creep.moveTo(closestSite);
+         creep.moveTo(closestSite, {
+            visualizePathStyle: { stroke: '#88ff88' },
+         });
       }
    }
 
@@ -151,10 +153,7 @@ const aiBuild = (creep: ICreep) => {
 };
 
 const aiRepair = (creep: ICreep) => {
-   if (
-      !creep.carry.energy ||
-      getStats().repair.length >= getStats().store.length
-   ) {
+   if (!creep.carry.energy || getStats().repair.length) {
       return false;
    }
 
@@ -177,17 +176,17 @@ const aiDerp = (creep: ICreep) => {
    return true;
 };
 
-type TRunner = (creep: ICreep) => boolean; // returns if the script must halt
+type TRunner = (creep: ICreep, index: number, total: number) => boolean; // returns if the script must halt
 
 export const scriptsMap: {
    [key: string]: TRunner;
 } = {
    defend: aiDefendFromHostiles,
    harvest: aiGetEnergy,
-   build: aiBuild,
    upgrade: aiUpgrade,
-   repair: aiRepair,
    store: aiStoreEnergy,
+   build: aiBuild,
+   repair: aiRepair,
    derp: aiDerp,
 };
 
@@ -205,9 +204,9 @@ export const resetStats = () => {
 
 export const getStats = () => creepStats;
 
-export function creepAI(creep: ICreep, index: number) {
+export function creepAI(creep: ICreep, index: number, total: number) {
    for (const script of scripts) {
-      if (scriptsMap[script](creep)) {
+      if (scriptsMap[script](creep, index, total)) {
          creep.memory.activeScript = script;
          creepStats[script].push(creep.name);
          break;

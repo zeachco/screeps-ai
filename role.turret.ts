@@ -24,7 +24,7 @@ export function turretAI() {
       });
 
       if (brokenUnits.length) {
-         const randomBrokenUnit = brokenUnits[random(brokenUnits.length - 1)];
+         const randomBrokenUnit = brokenUnits[0];
          tower.repair(randomBrokenUnit);
       }
    });
