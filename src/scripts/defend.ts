@@ -1,5 +1,5 @@
 import { ICreep } from '../types';
-import { log, doesCreepCan } from '../utils';
+import { log, doesCreepCan, moveToOptions } from '../utils';
 
 export const aiDefendFromHostiles = (creep: ICreep) => {
    const closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
@@ -16,7 +16,7 @@ export const aiDefendFromHostiles = (creep: ICreep) => {
             const fn =
                atkType === RANGED_ATTACK ? creep.rangedAttack : creep.attack;
             if (fn(closestHostile) === ERR_NOT_IN_RANGE) {
-               creep.moveTo(closestHostile);
+               creep.moveTo(closestHostile, moveToOptions('#ff0000'));
             }
             return true;
          }

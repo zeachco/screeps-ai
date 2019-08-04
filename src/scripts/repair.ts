@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { SHOULD_HAVE_ENERGY } from '../utils';
+import { SHOULD_HAVE_ENERGY, moveToOptions } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestDamagedStructure = creep.pos.findClosestByPath(
@@ -10,11 +10,7 @@ const run = (creep: ICreep) => {
    );
    if (closestDamagedStructure) {
       if (creep.repair(closestDamagedStructure) === ERR_NOT_IN_RANGE) {
-         creep.moveTo(closestDamagedStructure, {
-            visualizePathStyle: {
-               stroke: '#00ff88',
-            },
-         });
+         creep.moveTo(closestDamagedStructure, moveToOptions('#0000ff'));
       }
    }
 };

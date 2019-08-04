@@ -17,8 +17,8 @@ export const energyStructureByOrder: TPowerStructures[] = [
 ];
 
 export const SHOW_ROLES = false;
-export const CREEPS_PER_TIERS = 5;
-export const MAX_CREEPS = 10;
+export const CREEPS_PER_TIERS = 1;
+export const MAX_CREEPS = 15;
 
 const r = (part: BodyPartConstant, count: number) => {
    const parts: BodyPartConstant[] = [];

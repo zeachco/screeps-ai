@@ -9,6 +9,7 @@ const creepFactory = (budget: number) => {
    const preset: BodyPartConstant[] = [MOVE, WORK, MOVE, CARRY, MOVE];
    while (cost <= budget) {
       cost += 100;
+      if (cost > budget) return parts;
       const presetIndex = index % preset.length;
       const part = preset[presetIndex] || RANGED_ATTACK;
       parts.unshift(part);
@@ -17,6 +18,7 @@ const creepFactory = (budget: number) => {
    return parts;
 };
 
+// TODO base off available energy instead of nb of creep
 const getBudgetFor = (creepCount: number): number =>
    300 + Math.floor(creepCount / CREEPS_PER_TIERS) * 100;
 
@@ -30,16 +32,22 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
       const targetPrice = getBudgetFor(creeps.length);
       const body = creepFactory(targetPrice);
       const tier = body.length - 2;
-      const newName = `T${tier}_${Math.round(Game.time / 10)}`;
+      const newName = `T${tier}_${Game.time}`;
 
       const result = spawn.spawnCreep(body, newName, {
          memory: DEFAULT_MEMORY,
       });
 
+      const currentEnergy = spawn.energy;
+
       if (result === OK) {
          log(`${newName} created`, body);
       } else if (result === ERR_NOT_ENOUGH_ENERGY) {
-         log(`needs energy to ${body.length * 100} for a T${tier}`, body);
+         log(
+            `needs energy to ${body.length *
+               100}/${targetPrice}/${currentEnergy} for a T${tier}`,
+            body
+         );
       } else if (result !== ERR_BUSY) {
          log(`Failed to create creep with error ${result}`);
       }

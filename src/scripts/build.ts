@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { SHOULD_HAVE_ENERGY, countCreepsByRole } from '../utils';
+import { SHOULD_HAVE_ENERGY, countCreepsByRole, moveToOptions } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
@@ -8,9 +8,7 @@ const run = (creep: ICreep) => {
 
    if (closestSite) {
       if (creep.build(closestSite) === ERR_NOT_IN_RANGE) {
-         creep.moveTo(closestSite, {
-            visualizePathStyle: { stroke: '#88ff88' },
-         });
+         creep.moveTo(closestSite, moveToOptions('#ff00ff'));
       }
    }
 };
@@ -20,6 +18,6 @@ export const ROLE_BUILD: IRoleConfig = {
    run,
    roomRequirements: ({ room }, cs) =>
       !!room.find(FIND_MY_CONSTRUCTION_SITES).length &&
-      countCreepsByRole(cs, 'build') < cs.length / 2,
+      countCreepsByRole(cs, 'build') < cs.length / 4,
    ...SHOULD_HAVE_ENERGY,
 };
