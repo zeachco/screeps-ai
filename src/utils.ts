@@ -3,6 +3,22 @@ import { ICreep, TRoleName, ISpawn } from './types';
 export const random = (max: number, min = 0) =>
    Math.round(Math.random() * (max - min));
 
+export const arrayFill = (
+   count: number,
+   fn: (index?: number) => any = (i) => i
+) =>
+   Array(count)
+      .fill(undefined)
+      .map((_, i) => fn(i));
+
+export const createMapFromArray = (arr: any[], fill: any = 0) => {
+   const map = {} as any;
+   for (const i in arr) {
+      map[i] = fill;
+   }
+   return map;
+};
+
 export function harvestSourceBasedOfIndex(creep: Creep, index: number) {
    const sources = creep.room.find(FIND_SOURCES);
    const selectIndex = index % sources.length;

@@ -1,5 +1,11 @@
 import { ICreep, IRoleConfig } from '../types';
-import { doesCreepCan, moveToOptions, random } from '../utils';
+import {
+   doesCreepCan,
+   moveToOptions,
+   random,
+   arrayFill,
+   createMapFromArray,
+} from '../utils';
 
 const run = (creep: ICreep) => {
    // first pick decaying resources
@@ -22,34 +28,38 @@ const run = (creep: ICreep) => {
    }
 };
 
+interface IStats {
+   [key: string]: number;
+}
+
 export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
    run,
    roomRequirements: (spawn) => true,
    onStart: (c) => {
-      const sources = c.room
-         .find(FIND_SOURCES_ACTIVE)
-         .map((s, i) => ({
-            index: i,
-            energy: s.energy,
-            ...s,
-         }))
-         .sort((a, b) => b.energy - a.energy);
+      // TODO smart ressources
 
       const allCreeps = c.room.find(FIND_MY_CREEPS) as ICreep[];
+      const sources = c.room.find(FIND_SOURCES_ACTIVE);
 
-      const powerCreeps = allCreeps
+      const sourcesStats = allCreeps
          .filter((c: ICreep) => c.memory.role === 'harvest')
          .reduce(
-            (acc: number[], c: ICreep) => {
-               return [];
+            (acc: IStats, c: ICreep) => {
+               acc[c.memory.targetSourceIndex]++;
+               return acc;
             },
-            [] as number[]
+            createMapFromArray(sources) as IStats
          );
 
-      console.log(JSON.stringify(powerCreeps));
+      const sourcesByOccupation = sources
+         .map((s, i) => ({
+            index: i,
+            creeps: sourcesStats[i],
+         }))
+         .sort((a, b) => a.creeps - b.creeps);
 
-      const index = random(1); // || sources[0].index;
+      const index = sourcesByOccupation[0].index;
       c.say(`harvest[${index}]`);
       c.memory.targetSourceIndex = index;
    },
