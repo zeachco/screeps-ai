@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { doesCreepCan } from '../utils';
+import { doesCreepCan, random } from '../utils';
 
 const run = (creep: ICreep) => {
    // first pick decaying resources
@@ -13,7 +13,7 @@ const run = (creep: ICreep) => {
 
    // then get the reserves
    const sources = creep.room.find(FIND_SOURCES);
-   const selectIndex = 0; //index % sources.length;
+   const selectIndex = creep.memory.targetSourceIndex;
 
    if (sources[selectIndex]) {
       if (creep.harvest(sources[selectIndex]) == ERR_NOT_IN_RANGE) {
@@ -28,6 +28,11 @@ export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
    run,
    roomRequirements: (spawn) => true,
+   onStart: (c) => {
+      const index = random(1);
+      c.say(`source #${index + 1}`);
+      c.memory.targetSourceIndex = index;
+   },
    shouldRun: (c) =>
       doesCreepCan(c, [WORK, CARRY]) && c.carry.energy < c.carryCapacity,
    shouldStop: (c) => c.carry.energy === c.carryCapacity,

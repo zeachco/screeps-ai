@@ -37,11 +37,16 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
       if (role === ROLE_IDLE || role.shouldStop(creep)) {
          role = findRole(spawn, creep, allSpawnCreeps);
          creep.memory.role = role.name;
-         creep.say(role.name);
+         if (role.onStart) {
+            role.onStart(creep);
+         } else {
+            creep.say(role.name);
+         }
       }
 
       try {
          if (role && role.run) {
+            creep.say(role.name);
             role.run(creep);
          } else {
             throw 'Missing run script in config';

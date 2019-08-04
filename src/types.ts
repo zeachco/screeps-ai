@@ -14,6 +14,7 @@ export interface IRoleConfig {
    roomRequirements: (spawn: ISpawn, creeps: ICreep[]) => boolean;
    shouldRun: (creep: ICreep) => boolean;
    shouldStop: (creep: ICreep) => boolean;
+   onStart?: (creep: ICreep) => any;
    run: (creep: ICreep) => void;
    name: TRoleName;
 }

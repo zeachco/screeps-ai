@@ -9,15 +9,15 @@ import { IRoleConfig, IRolesMap } from './types';
 type TPowerStructures = STRUCTURE_SPAWN | STRUCTURE_TOWER | STRUCTURE_EXTENSION;
 
 export const energyStructureByOrder: TPowerStructures[] = [
-   STRUCTURE_TOWER,
+   // STRUCTURE_EXTENSION,
    STRUCTURE_SPAWN,
-   STRUCTURE_EXTENSION,
+   STRUCTURE_TOWER,
    // STRUCTURE_CONTAINER,
    // STRUCTURE_POWER_BANK,
 ];
 
-export const CREEPS_PER_TIERS = 10;
-export const MAX_CREEPS = 20;
+export const CREEPS_PER_TIERS = 8;
+export const MAX_CREEPS = 10;
 
 export const BODY_TIERS = [
    [WORK, CARRY, MOVE],

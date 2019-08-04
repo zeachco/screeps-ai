@@ -1,4 +1,4 @@
-import { log } from './utils';
+import { log, random } from './utils';
 import { ICreep, ISpawn, ICreepMemory } from './types';
 import { MAX_CREEPS, BODY_TIERS, CREEPS_PER_TIERS } from './config';
 
