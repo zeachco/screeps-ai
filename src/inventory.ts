@@ -32,7 +32,7 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
 
       if (
          !spawn.memory.creepId ||
-         Math.min(...creeps.map((c) => +c.name.split('-')[1])) > MAX_CREEPS
+         Math.min(...creeps.map((c) => +c.name.split('_')[1])) > MAX_CREEPS
       ) {
          spawn.memory.creepId = 0;
       }
