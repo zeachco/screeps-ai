@@ -19,6 +19,11 @@ export const createMapFromArray = (arr: any[], fill: any = 0) => {
    return map;
 };
 
+export const energySpawnHaveEnoughtEnergy = (
+   eSpawn: StructurePowerSpawn,
+   creep: ICreep
+) => creep.body.filter((b) => b.type === CARRY).length * 50 < eSpawn.energy;
+
 export function harvestSourceBasedOfIndex(creep: Creep, index: number) {
    const sources = creep.room.find(FIND_SOURCES);
    const selectIndex = index % sources.length;

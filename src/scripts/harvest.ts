@@ -5,6 +5,7 @@ import {
    random,
    arrayFill,
    createMapFromArray,
+   energySpawnHaveEnoughtEnergy,
 } from '../utils';
 
 const run = (creep: ICreep) => {
@@ -40,7 +41,9 @@ export const ROLE_HARVEST: IRoleConfig = {
       // TODO smart ressources
 
       const allCreeps = c.room.find(FIND_MY_CREEPS) as ICreep[];
-      const sources = c.room.find(FIND_SOURCES_ACTIVE);
+      const sources = c.room
+         .find(FIND_SOURCES_ACTIVE)
+         .filter((s) => energySpawnHaveEnoughtEnergy(s as any, c));
 
       const sourcesStats = allCreeps
          .filter((c: ICreep) => c.memory.role === 'harvest')
