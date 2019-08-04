@@ -2,6 +2,23 @@ import { log, random } from './utils';
 import { ICreep, ISpawn, ICreepMemory } from './types';
 import { MAX_CREEPS, BODY_TIERS, CREEPS_PER_TIERS } from './config';
 
+const creepFactory = (budget: number) => {
+   const parts: BodyPartConstant[] = [WORK, MOVE, CARRY];
+   let cost = 300;
+   let index = 0;
+   const preset: BodyPartConstant[] = [MOVE, WORK, MOVE, CARRY, MOVE];
+   while (cost <= budget) {
+      cost += 100;
+      const presetIndex = index % parts.length;
+      parts.unshift(preset[presetIndex]);
+      index++;
+   }
+   return parts;
+};
+
+const getBudgetFor = (creepCount: number): number =>
+   300 + Math.floor(creepCount / 3) * 100;
+
 export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
    if (creeps.length <= MAX_CREEPS) {
       for (
@@ -16,7 +33,11 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
             targetSourceIndex: 0,
          };
 
-         const result = spawn.spawnCreep(BODY_TIERS[index], newName, {
+         const targetPrice = getBudgetFor(creeps.length);
+         const body = creepFactory(targetPrice);
+         console.log('targetPrice', targetPrice, body);
+
+         const result = spawn.spawnCreep(body, newName, {
             memory: defaultMemory,
          });
 

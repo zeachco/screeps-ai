@@ -16,18 +16,29 @@ export const energyStructureByOrder: TPowerStructures[] = [
    // STRUCTURE_POWER_BANK,
 ];
 
+export const SHOW_ROLES = false;
 export const CREEPS_PER_TIERS = 5;
 export const MAX_CREEPS = 10;
 
+const r = (part: BodyPartConstant, count: number) => {
+   const parts: BodyPartConstant[] = [];
+   for (let i = 0; i < count; i++) {
+      parts.push(part);
+   }
+   return parts;
+};
+
 export const BODY_TIERS = [
    [WORK, CARRY, MOVE],
-   [WORK, WORK, CARRY, MOVE],
-   [MOVE, WORK, WORK, CARRY, MOVE],
+   [...r(WORK, 2), CARRY, MOVE],
+   [WORK, WORK, CARRY, ...r(MOVE, 2)],
    [MOVE, WORK, WORK, WORK, CARRY, MOVE],
    [MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE],
    [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE],
-   [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, ATTACK, MOVE],
-   [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, RANGED_ATTACK, MOVE],
+   [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+   [MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+   [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+   [MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE],
 ];
 
 export const rolesDispatch: IRoleConfig[] = [

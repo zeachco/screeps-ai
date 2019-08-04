@@ -20,6 +20,6 @@ export const ROLE_BUILD: IRoleConfig = {
    run,
    roomRequirements: ({ room }, cs) =>
       !!room.find(FIND_MY_CONSTRUCTION_SITES).length &&
-      countCreepsByRole(cs, 'build') < cs.length / 3,
+      countCreepsByRole(cs, 'build') < cs.length / 2,
    ...SHOULD_HAVE_ENERGY,
 };

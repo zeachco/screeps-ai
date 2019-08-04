@@ -1,6 +1,6 @@
 import { log } from './utils';
 import { IRoleConfig, ICreep, ISpawn } from './types';
-import { ROLES, rolesDispatch } from './config';
+import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
 
 const findRole = (
@@ -46,7 +46,7 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
 
       try {
          if (role && role.run) {
-            creep.say(role.name);
+            if (SHOW_ROLES) creep.say(role.name);
             role.run(creep);
          } else {
             throw 'Missing run script in config';

@@ -7,11 +7,13 @@ if (!target) {
    process.exit(0);
 }
 
+const MODES = ['development', 'production'];
+
 module.exports = {
    entry: {
       main: path.join(__dirname, 'src'),
    },
-   mode: 'development',
+   mode: MODES[1],
    resolve: {
       extensions: ['.ts', '.js', '.json'],
    },

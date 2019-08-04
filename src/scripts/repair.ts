@@ -2,7 +2,7 @@ import { ICreep, IRoleConfig } from '../types';
 import { SHOULD_HAVE_ENERGY } from '../utils';
 
 const run = (creep: ICreep) => {
-   const closestDamagedStructure = creep.pos.findClosestByRange(
+   const closestDamagedStructure = creep.pos.findClosestByPath(
       FIND_STRUCTURES,
       {
          filter: (structure) => structure.hits < structure.hitsMax,

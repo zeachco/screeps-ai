@@ -30,7 +30,7 @@ export const ROLE_HARVEST: IRoleConfig = {
    roomRequirements: (spawn) => true,
    onStart: (c) => {
       const index = random(1);
-      c.say(`source #${index + 1}`);
+      c.say(`harvest #${index + 1}`);
       c.memory.targetSourceIndex = index;
    },
    shouldRun: (c) =>

@@ -20,9 +20,13 @@ export function turretAI(spawn: ISpawn) {
       }
 
       // if not at war, it contributes
-      const brokenUnits = tower.room.find(FIND_MY_STRUCTURES, {
-         filter: (structure) => structure.hits < structure.hitsMax,
-      });
+      const brokenUnits = tower.room
+         .find(FIND_STRUCTURES, {
+            filter: (structure) => structure.hits < structure.hitsMax,
+         })
+         .sort((a, b) => {
+            return a.hitsMax - b.hitsMax;
+         });
 
       if (brokenUnits.length) {
          const randomBrokenUnit = brokenUnits[0];
