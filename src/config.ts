@@ -16,7 +16,7 @@ export const energyStructureByOrder: TPowerStructures[] = [
    // STRUCTURE_POWER_BANK,
 ];
 
-export const CREEPS_PER_TIERS = 10;
+export const CREEPS_PER_TIERS = 3;
 export const MAX_CREEPS = 20;
 
 export const BODY_TIERS = [
