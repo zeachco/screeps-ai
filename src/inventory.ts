@@ -1,20 +1,11 @@
 import { log } from './utils';
-import {
-   aiStoreEnergy,
-   aiBuild,
-   aiGetEnergy,
-   aiUpgrade,
-   aiRepair,
-} from './creepAI';
-import {
-   ICreep,
-   ISpawn,
-   IRoleConfig,
-   TRoleName,
-   ISpawnStats,
-   IRolesMap,
-   ICreepMemory,
-} from './types';
+import { ICreep, ISpawn, IRoleConfig, IRolesMap, ICreepMemory } from './types';
+import { ROLE_HARVEST } from './scripts/harvest';
+import { ROLE_STORE } from './scripts/store';
+import { ROLE_BUILD } from './scripts/build';
+import { ROLE_UPGRADE } from './scripts/upgrade';
+import { ROLE_REPAIR } from './scripts/repair';
+import { ROLE_IDLE } from './scripts/idle';
 
 const CREEPS_PER_TIERS = 10;
 const MAX_CREEPS = 20;
@@ -29,71 +20,6 @@ const BODY_TIERS = [
    [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, ATTACK, MOVE],
    [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, RANGED_ATTACK, MOVE],
 ];
-
-const countByRole = (creeps: ICreep[], role: TRoleName) =>
-   creeps.reduce((acc, c) => (c.memory.role === role ? acc + 1 : acc), 0);
-
-const doesCreepCan = (creep: ICreep, partsRequired: BodyPartConstant[]) =>
-   partsRequired.reduce(
-      (ok, part) => ok && creep.body.map((b) => b.type).indexOf(part) !== -1,
-      true
-   );
-
-const SHOULD_HAVE_ENERGY = {
-   shouldRun: (c: ICreep) => c.carry.energy > 0,
-   shouldStop: (c: ICreep) => c.carry.energy === 0,
-};
-
-const ROLE_IDLE: IRoleConfig = {
-   name: 'idle',
-   run: () => {
-      throw 'DO NOT RUN IDLE!';
-   },
-   roomRequirements: () => true,
-   shouldRun: () => true,
-   shouldStop: () => false,
-};
-
-const ROLE_HARVEST: IRoleConfig = {
-   name: 'harvest',
-   run: aiGetEnergy,
-   roomRequirements: (spawn) => true,
-   shouldRun: (c) =>
-      doesCreepCan(c, [WORK, CARRY]) && c.carry.energy < c.carryCapacity,
-   shouldStop: (c) => c.carry.energy === c.carryCapacity,
-};
-
-const ROLE_STORE: IRoleConfig = {
-   name: 'store',
-   run: aiStoreEnergy,
-   roomRequirements: ({ energy, energyCapacity }, cs) =>
-      energy < energyCapacity && countByRole(cs, 'store') < 2,
-   ...SHOULD_HAVE_ENERGY,
-};
-
-const ROLE_UPGRADE: IRoleConfig = {
-   name: 'upgrade',
-   run: aiUpgrade,
-   roomRequirements: (_, cs) => countByRole(cs, 'upgrade') <= 1,
-   ...SHOULD_HAVE_ENERGY,
-};
-
-const ROLE_BUILD: IRoleConfig = {
-   name: 'build',
-   run: aiBuild,
-   roomRequirements: ({ room }) =>
-      !!room.find(FIND_MY_CONSTRUCTION_SITES).length,
-   ...SHOULD_HAVE_ENERGY,
-};
-
-const ROLE_REPAIR: IRoleConfig = {
-   name: 'repair',
-   run: aiRepair,
-   roomRequirements: ({ room }) =>
-      room.find(FIND_MY_STRUCTURES, { filter: (s) => s.hits < s.hitsMax })
-         .length > 0,
-   ...SHOULD_HAVE_ENERGY,
-};
 
 const rolesDispatch: IRoleConfig[] = [
    ROLE_UPGRADE,

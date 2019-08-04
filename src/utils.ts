@@ -1,4 +1,4 @@
-import { ICreep } from './types';
+import { ICreep, TRoleName } from './types';
 
 export const random = (max: number, min = 0) =>
    Math.round(Math.random() * (max - min));
@@ -52,3 +52,20 @@ export const findStructureAroundSpawn = (
 };
 
 export const getBodyParts = (creep: ICreep) => creep.body.map((b) => b.type);
+
+export const doesCreepCan = (
+   creep: ICreep,
+   partsRequired: BodyPartConstant[]
+) =>
+   partsRequired.reduce(
+      (ok, part) => ok && creep.body.map((b) => b.type).indexOf(part) !== -1,
+      true
+   );
+
+export const countCreepsByRole = (creeps: ICreep[], role: TRoleName) =>
+   creeps.reduce((acc, c) => (c.memory.role === role ? acc + 1 : acc), 0);
+
+export const SHOULD_HAVE_ENERGY = {
+   shouldRun: (c: ICreep) => c.carry.energy > 0,
+   shouldStop: (c: ICreep) => c.carry.energy === 0,
+};

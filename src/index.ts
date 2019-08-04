@@ -1,3 +1,8 @@
-import { updateSpawns } from './controllers/Room';
+import { clean } from './utils';
+import { manageSpawn } from './inventory';
+import { ISpawn } from './types';
 
-updateSpawns();
+clean();
+Object.keys(Game.spawns).forEach((name) =>
+   manageSpawn(Game.spawns[name] as ISpawn)
+);
