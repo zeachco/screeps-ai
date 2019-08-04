@@ -32,6 +32,9 @@ export function manageSpawn(spawn: ISpawn) {
    const allSpawnCreeps = spawn.room.find(FIND_MY_CREEPS) as ICreep[];
 
    allSpawnCreeps.forEach((creep) => {
+      if (!creep.memory.role) {
+         creep.memory.role = 'idle';
+      }
       let role: IRoleConfig = ROLES[creep.memory.role];
 
       if (!role) {
