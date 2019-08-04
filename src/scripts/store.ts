@@ -8,16 +8,18 @@ export const run = (creep: ICreep) => {
 
    const targets = creep.room
       .find(FIND_STRUCTURES, {
-         filter: (str) =>
-            energyStructureByOrder.indexOf(str.structureType as any) !== -1 &&
-            str.isActive(),
+         filter: (s: StructureExtension) =>
+            energyStructureByOrder.indexOf(s.structureType as any) !== -1 &&
+            s.isActive() &&
+            s.energy < s.energyCapacity,
       })
       // TODO get power structure type (any)
       .filter((str: any) => str.energy < str.energyCapacity)
       .sort((a, b) => byPriority(a) - byPriority(b));
 
    if (targets.length) {
-      if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      const atempt = creep.transfer(targets[0], RESOURCE_ENERGY);
+      if (atempt === ERR_NOT_IN_RANGE) {
          creep.moveTo(targets[0], {
             visualizePathStyle: { stroke: '#ffffff' },
          });
@@ -29,6 +31,6 @@ export const ROLE_STORE: IRoleConfig = {
    name: 'store',
    run,
    roomRequirements: ({ energy, energyCapacity }, cs) =>
-      energy < energyCapacity && countCreepsByRole(cs, 'store') < 2,
+      countCreepsByRole(cs, 'store') < 2,
    ...SHOULD_HAVE_ENERGY,
 };
