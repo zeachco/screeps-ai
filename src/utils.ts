@@ -1,4 +1,4 @@
-import { ICreep } from './enums';
+import { ICreep } from './types';
 
 export const random = (max: number, min = 0) =>
    Math.round(Math.random() * (max - min));

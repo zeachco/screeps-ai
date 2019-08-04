@@ -4,15 +4,26 @@
    "description": "",
    "main": "main.js",
    "scripts": {
-      "start": "tsc -w ./main.ts",
+      "start_ts": "tsc -w ./main.ts",
+      "start": "webpack -w",
       "test": "echo \"Error: no test specified\" && exit 1"
    },
    "keywords": [],
    "author": "",
    "license": "ISC",
    "devDependencies": {
+      "@babel/core": "^7.5.5",
+      "@babel/preset-env": "^7.5.5",
+      "@babel/preset-typescript": "^7.3.3",
+      "@babel/register": "^7.5.5",
       "@types/screeps": "^2.5.4",
+      "babel-loader": "^8.0.6",
+      "html-webpack-plugin": "^3.2.0",
       "prettier": "1.18.2",
-      "typescript": "^3.5.3"
+      "script-ext-html-webpack-plugin": "^2.1.4",
+      "source-map-loader": "^0.2.4",
+      "typescript": "^3.5.3",
+      "webpack": "^4.39.1",
+      "webpack-cli": "^3.3.6"
    }
 }

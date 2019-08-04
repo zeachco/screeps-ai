@@ -1,7 +1,7 @@
 import { findStructureAroundSpawn, log, random } from './utils';
 
 export function turretAI() {
-   findStructureAroundSpawn('Spawn1', STRUCTURE_TOWER).forEach((tower) => {
+   findStructureAroundSpawn('SpawnOrigin', STRUCTURE_TOWER).forEach((tower) => {
       const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
       if (closestHostile) {
          if (tower.energy) {
