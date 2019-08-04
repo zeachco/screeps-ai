@@ -28,19 +28,6 @@ const r = (part: BodyPartConstant, count: number) => {
    return parts;
 };
 
-export const BODY_TIERS = [
-   [WORK, CARRY, MOVE],
-   [...r(WORK, 2), CARRY, MOVE],
-   [WORK, WORK, CARRY, ...r(MOVE, 2)],
-   [MOVE, WORK, WORK, WORK, CARRY, MOVE],
-   [MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE],
-   [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE],
-   [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-   [MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-   [MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-   [MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE],
-];
-
 export const rolesDispatch: IRoleConfig[] = [
    ROLE_UPGRADE,
    ROLE_BUILD,

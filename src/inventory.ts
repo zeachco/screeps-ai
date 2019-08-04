@@ -1,6 +1,6 @@
-import { log, random } from './utils';
+import { log } from './utils';
 import { ICreep, ISpawn, ICreepMemory } from './types';
-import { MAX_CREEPS, BODY_TIERS, CREEPS_PER_TIERS } from './config';
+import { MAX_CREEPS, CREEPS_PER_TIERS } from './config';
 
 const creepFactory = (budget: number) => {
    const parts: BodyPartConstant[] = [WORK, MOVE, CARRY];
@@ -18,45 +18,30 @@ const creepFactory = (budget: number) => {
 };
 
 const getBudgetFor = (creepCount: number): number =>
-   300 + Math.floor(creepCount) * 100;
+   300 + Math.floor(creepCount / CREEPS_PER_TIERS) * 100;
+
+const DEFAULT_MEMORY: ICreepMemory = {
+   role: 'idle',
+   targetSourceIndex: 0,
+};
 
 export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
    if (creeps.length <= MAX_CREEPS) {
-      for (
-         let index = BODY_TIERS.length - 1;
-         index >= creeps.length / CREEPS_PER_TIERS;
-         index--
-      ) {
-         const newName = `T${index + 1}-${Game.time}`;
+      const targetPrice = getBudgetFor(creeps.length);
+      const body = creepFactory(targetPrice);
+      const tier = body.length - 3;
+      const newName = `T${tier}_${Math.round(Game.time / 100)}`;
 
-         const defaultMemory: ICreepMemory = {
-            role: 'idle',
-            targetSourceIndex: 0,
-         };
+      const result = spawn.spawnCreep(body, newName, {
+         memory: DEFAULT_MEMORY,
+      });
 
-         const targetPrice = getBudgetFor(creeps.length);
-         const body = creepFactory(targetPrice);
-         console.log('targetPrice', targetPrice, body);
-
-         const result = spawn.spawnCreep(body, newName, {
-            memory: defaultMemory,
-         });
-
-         if (result === OK) {
-            log(`${newName} created`, BODY_TIERS[index]);
-            break;
-         } else if (result === ERR_NOT_ENOUGH_ENERGY) {
-            if (index <= creeps.length / CREEPS_PER_TIERS) {
-               log(
-                  `needs energy to ${BODY_TIERS[index].length *
-                     100} for a T${index + 1}`,
-                  BODY_TIERS[index]
-               );
-            }
-         } else if (result !== ERR_BUSY) {
-            log(`Failed to create creep with error ${result}`);
-            break;
-         }
+      if (result === OK) {
+         log(`${newName} created`, body);
+      } else if (result === ERR_NOT_ENOUGH_ENERGY) {
+         log(`needs energy to ${body.length * 100} for a T${tier}`, body);
+      } else if (result !== ERR_BUSY) {
+         log(`Failed to create creep with error ${result}`);
       }
    }
 }
