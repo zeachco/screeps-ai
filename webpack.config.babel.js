@@ -1,18 +1,23 @@
 const path = require('path');
+require('dotenv').config();
 
-const target = '/home/olivier/.config/Screeps/scripts/127_0_0_1___21025/default'
+const target = process.env.BUILD;
+if (!target) {
+   console.error('please define BUILD in .env file');
+   process.exit(0);
+}
 
 module.exports = {
    entry: {
-      main: path.join(__dirname, 'src')
+      main: path.join(__dirname, 'src'),
    },
    mode: 'development',
    resolve: {
-      extensions: ['.ts', '.js', '.json']
+      extensions: ['.ts', '.js', '.json'],
    },
    output: {
       path: target,
-      filename: 'main.js'
+      filename: 'main.js',
    },
    module: {
       rules: [
@@ -22,13 +27,14 @@ module.exports = {
          },
          {
             test: /\.js$/,
-            use: ["source-map-loader"],
-            enforce: "pre"
-         }]
+            use: ['source-map-loader'],
+            enforce: 'pre',
+         },
+      ],
    },
    plugins: [],
    stats: {
-      colors: true
+      colors: true,
    },
-   devtool: 'source-map'
+   devtool: 'source-map',
 };
