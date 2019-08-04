@@ -6,19 +6,24 @@ import { ROLE_HARVEST } from './scripts/harvest';
 import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
 
-type TPowerStructures = STRUCTURE_SPAWN | STRUCTURE_TOWER | STRUCTURE_EXTENSION;
+type TPowerStructures =
+   | STRUCTURE_SPAWN
+   | STRUCTURE_TOWER
+   | STRUCTURE_EXTENSION
+   | STRUCTURE_CONTAINER
+   | STRUCTURE_POWER_BANK;
 
 export const energyStructureByOrder: TPowerStructures[] = [
    STRUCTURE_EXTENSION,
    STRUCTURE_TOWER,
    STRUCTURE_SPAWN,
-   // STRUCTURE_CONTAINER,
-   // STRUCTURE_POWER_BANK,
+   STRUCTURE_CONTAINER,
+   STRUCTURE_POWER_BANK,
 ];
 
 export const SHOW_ROLES = false;
 export const CREEPS_PER_TIERS = 1;
-export const MAX_CREEPS = 15;
+export const MAX_CREEPS = 10;
 
 const r = (part: BodyPartConstant, count: number) => {
    const parts: BodyPartConstant[] = [];

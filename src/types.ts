@@ -38,6 +38,7 @@ export interface ISpawnStats {
 
 export interface ISpawnMemory extends SpawnMemory {
    stats: ISpawnStats;
+   creepId: number;
 }
 
 export interface ISpawn extends StructureSpawn {
