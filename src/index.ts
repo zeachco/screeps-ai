@@ -1,6 +1,6 @@
 import { clean } from './utils';
-import { manageSpawn } from './inventory';
 import { ISpawn } from './types';
+import { manageSpawn } from './spawns';
 
 clean();
 Object.keys(Game.spawns).forEach((name) =>

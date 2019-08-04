@@ -1,74 +1,8 @@
 import { log } from './utils';
-import { ICreep, ISpawn, IRoleConfig, ICreepMemory } from './types';
-import { ROLE_IDLE } from './scripts/idle';
-import {
-   rolesDispatch,
-   ROLES,
-   MAX_CREEPS,
-   BODY_TIERS,
-   CREEPS_PER_TIERS,
-} from './config';
-import { turretAI } from './role.turret';
+import { ICreep, ISpawn, ICreepMemory } from './types';
+import { MAX_CREEPS, BODY_TIERS, CREEPS_PER_TIERS } from './config';
 
-const findRole = (
-   spawn: ISpawn,
-   creep: ICreep,
-   creeps: ICreep[]
-): IRoleConfig => {
-   const roles: IRoleConfig[] = rolesDispatch.filter((need) =>
-      need.roomRequirements(spawn, creeps)
-   );
-
-   for (let i = 0; i < roles.length; i++) {
-      const newRole = roles[i];
-      if (newRole.shouldRun(creep)) {
-         return newRole;
-      }
-   }
-
-   return ROLE_IDLE;
-};
-
-export function manageSpawn(spawn: ISpawn) {
-   const allSpawnCreeps = spawn.room.find(FIND_MY_CREEPS) as ICreep[];
-
-   allSpawnCreeps.forEach((creep) => {
-      if (!creep.memory.role) {
-         creep.memory.role = 'idle';
-      }
-      let role: IRoleConfig = ROLES[creep.memory.role];
-
-      if (!role) {
-         log(`${creep.name} have unexisting role "${creep.memory.role}"`);
-      }
-
-      // Need a new role?
-      if (role === ROLE_IDLE || role.shouldStop(creep)) {
-         role = findRole(spawn, creep, allSpawnCreeps);
-         creep.memory.role = role.name;
-         creep.say(role.name);
-      }
-
-      try {
-         if (role && role.run) {
-            role.run(creep);
-         } else {
-            throw 'Missing run script in config';
-         }
-      } catch (error) {
-         log(error);
-         creep.say('ERROR!');
-      }
-   });
-
-   // Turret //
-
-   turretAI(spawn);
-
-   // INVENTORY //
-
-   const creeps = Object.keys(Game.creeps).map((name) => Game.creeps[name]);
-
+export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
    if (creeps.length <= MAX_CREEPS) {
       for (
          let index = BODY_TIERS.length - 1;

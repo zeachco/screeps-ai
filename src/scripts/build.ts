@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { SHOULD_HAVE_ENERGY } from '../utils';
+import { SHOULD_HAVE_ENERGY, countCreepsByRole } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestSite = creep.pos.findClosestByRange(
@@ -21,7 +21,8 @@ const run = (creep: ICreep) => {
 export const ROLE_BUILD: IRoleConfig = {
    name: 'build',
    run,
-   roomRequirements: ({ room }) =>
-      !!room.find(FIND_MY_CONSTRUCTION_SITES).length,
+   roomRequirements: ({ room }, cs) =>
+      !!room.find(FIND_MY_CONSTRUCTION_SITES).length &&
+      countCreepsByRole(cs, 'build') < cs.length / 3,
    ...SHOULD_HAVE_ENERGY,
 };
