@@ -29,8 +29,8 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
    if (creeps.length <= MAX_CREEPS) {
       const targetPrice = getBudgetFor(creeps.length);
       const body = creepFactory(targetPrice);
-      const tier = body.length - 3;
-      const newName = `T${tier}_${Math.round(Game.time / 100)}`;
+      const tier = body.length - 2;
+      const newName = `T${tier}_${Math.round(Game.time / 10)}`;
 
       const result = spawn.spawnCreep(body, newName, {
          memory: DEFAULT_MEMORY,
