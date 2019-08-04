@@ -2,12 +2,9 @@ import { ICreep, IRoleConfig } from '../types';
 import { SHOULD_HAVE_ENERGY, countCreepsByRole } from '../utils';
 
 const run = (creep: ICreep) => {
-   const closestSite = creep.pos.findClosestByRange(
-      FIND_MY_CONSTRUCTION_SITES,
-      {
-         filter: (structure) => structure.progress < structure.progressTotal,
-      }
-   );
+   const closestSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
+      filter: (structure) => structure.progress < structure.progressTotal,
+   });
 
    if (closestSite) {
       if (creep.build(closestSite) === ERR_NOT_IN_RANGE) {
