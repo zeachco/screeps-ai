@@ -43,8 +43,8 @@ export const BODY_TIERS = [
 
 export const rolesDispatch: IRoleConfig[] = [
    ROLE_UPGRADE,
-   ROLE_STORE,
    ROLE_BUILD,
+   ROLE_STORE,
    ROLE_REPAIR,
    ROLE_HARVEST,
    ROLE_IDLE,

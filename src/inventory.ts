@@ -9,15 +9,16 @@ const creepFactory = (budget: number) => {
    const preset: BodyPartConstant[] = [MOVE, WORK, MOVE, CARRY, MOVE];
    while (cost <= budget) {
       cost += 100;
-      const presetIndex = index % parts.length;
-      parts.unshift(preset[presetIndex]);
+      const presetIndex = index % preset.length;
+      const part = preset[presetIndex] || RANGED_ATTACK;
+      parts.unshift(part);
       index++;
    }
    return parts;
 };
 
 const getBudgetFor = (creepCount: number): number =>
-   300 + Math.floor(creepCount / 3) * 100;
+   300 + Math.floor(creepCount) * 100;
 
 export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
    if (creeps.length <= MAX_CREEPS) {
