@@ -1,4 +1,4 @@
-import { ICreep, TRoleName } from './types';
+import { ICreep, TRoleName, ISpawn } from './types';
 
 export const random = (max: number, min = 0) =>
    Math.round(Math.random() * (max - min));
@@ -30,24 +30,23 @@ export function clean() {
 }
 
 export const findStructureAroundSpawn = (
-   spawnName: string,
+   spawn: ISpawn,
    structureType?: string,
    from = FIND_MY_STRUCTURES
 ): StructureTower[] => {
    let towers: StructureTower[] = [];
-   const spawn = Game.spawns[spawnName];
-   if (spawn) {
-      let options: any = {};
-      if (structureType) {
-         options.filter = { structureType };
-      }
-      towers = spawn.room.find(from, options) as StructureTower[];
-      if (!towers.length) {
-         log(`Warning: no tower(s) found around ${spawnName}`);
-      }
-   } else {
-      log(`Error: could not find ${spawnName}`);
+
+   let options: any = {};
+
+   if (structureType) {
+      options.filter = { structureType };
    }
+
+   towers = spawn.room.find(from, options) as StructureTower[];
+   if (!towers.length) {
+      log(`Warning: no tower(s) found around ${spawn.name}`);
+   }
+
    return towers;
 };
 

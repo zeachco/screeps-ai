@@ -8,6 +8,7 @@ import {
    BODY_TIERS,
    CREEPS_PER_TIERS,
 } from './config';
+import { turretAI } from './role.turret';
 
 const findRole = (
    spawn: ISpawn,
@@ -59,6 +60,10 @@ export function manageSpawn(spawn: ISpawn) {
          creep.say('ERROR!');
       }
    });
+
+   // Turret //
+
+   turretAI(spawn);
 
    // INVENTORY //
 
