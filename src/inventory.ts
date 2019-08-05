@@ -24,7 +24,7 @@ const DEFAULT_MEMORY: ICreepMemory = {
 };
 
 export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
-   if (creeps.length <= MAX_CREEPS) {
+   if (creeps.length < MAX_CREEPS) {
       const currentEnergy = spawn.room.energyAvailable;
       const targetPrice = currentEnergy;
       const body = creepFactory(targetPrice);
