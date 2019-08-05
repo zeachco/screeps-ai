@@ -34,10 +34,10 @@ const r = (part: BodyPartConstant, count: number) => {
 };
 
 export const rolesDispatch: IRoleConfig[] = [
-   ROLE_UPGRADE,
    ROLE_STORE,
    ROLE_BUILD,
    ROLE_REPAIR,
+   ROLE_UPGRADE,
    ROLE_HARVEST,
    ROLE_IDLE,
 ];
