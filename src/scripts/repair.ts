@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { SHOULD_HAVE_ENERGY, moveToOptions } from '../utils';
+import { SHOULD_HAVE_ENERGY, moveToOptions, countCreepsByRole } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestDamagedStructure = creep.pos.findClosestByPath(
@@ -18,8 +18,8 @@ const run = (creep: ICreep) => {
 export const ROLE_REPAIR: IRoleConfig = {
    name: 'repair',
    run,
-   roomRequirements: ({ room }) =>
+   roomRequirements: ({ room }, cs) =>
       room.find(FIND_MY_STRUCTURES, { filter: (s) => s.hits < s.hitsMax })
-         .length > 0,
+         .length > 0 && countCreepsByRole(cs, 'repair') < cs.length / 4,
    ...SHOULD_HAVE_ENERGY,
 };
