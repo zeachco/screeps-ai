@@ -23,7 +23,7 @@ export const energyStructureByOrder: TPowerStructures[] = [
 
 export const SHOW_ROLES = false;
 export const CREEPS_PER_TIERS = 1;
-export const MAX_CREEPS = 10;
+export const MAX_CREEPS = 5;
 
 const r = (part: BodyPartConstant, count: number) => {
    const parts: BodyPartConstant[] = [];
@@ -35,9 +35,9 @@ const r = (part: BodyPartConstant, count: number) => {
 
 export const rolesDispatch: IRoleConfig[] = [
    ROLE_UPGRADE,
-   ROLE_STORE,
    ROLE_BUILD,
    ROLE_REPAIR,
+   ROLE_STORE,
    ROLE_HARVEST,
    ROLE_IDLE,
 ];
