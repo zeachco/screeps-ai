@@ -1,17 +1,34 @@
 import { log } from './utils';
 import { ICreep, ISpawn, ICreepMemory } from './types';
-import { MAX_CREEPS } from './config';
+import { MIN_CREEPS, MAX_CREEPS } from './config';
 
 const creepFactory = (budget: number) => {
-   const parts: BodyPartConstant[] = [WORK, MOVE, CARRY];
-   let cost = 300;
+   const parts: BodyPartConstant[] = [];
+   let cost = 0;
    let index = 0;
-   const preset: BodyPartConstant[] = [MOVE, WORK, MOVE, CARRY, MOVE];
+   const preset: BodyPartConstant[] = [
+      CARRY,
+      MOVE,
+      WORK,
+      MOVE,
+      CARRY,
+      MOVE,
+      WORK,
+      MOVE,
+      CARRY,
+      MOVE,
+      WORK,
+      MOVE,
+      CARRY,
+      MOVE,
+      ATTACK,
+      MOVE,
+   ];
    while (cost <= budget) {
-      cost += 100;
-      if (cost > budget) return parts;
       const presetIndex = index % preset.length;
       const part = preset[presetIndex] || RANGED_ATTACK;
+      cost += BODYPART_COST[part];
+      if (cost > budget) return parts;
       parts.unshift(part);
       index++;
    }
@@ -24,7 +41,11 @@ const DEFAULT_MEMORY: ICreepMemory = {
 };
 
 export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
-   if (creeps.length < MAX_CREEPS) {
+   const roomCapacityFull =
+      creeps.length < MAX_CREEPS &&
+      spawn.room.energyAvailable === spawn.room.energyCapacityAvailable;
+
+   if (creeps.length < MIN_CREEPS || roomCapacityFull) {
       const currentEnergy = spawn.room.energyAvailable;
       const targetPrice = currentEnergy;
       const body = creepFactory(targetPrice);
@@ -32,7 +53,7 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
 
       if (
          !spawn.memory.creepId ||
-         Math.min(...creeps.map((c) => +c.name.split('_')[1])) > MAX_CREEPS
+         Math.min(...creeps.map((c) => +c.name.split('_')[1])) > MIN_CREEPS
       ) {
          spawn.memory.creepId = 0;
       }
@@ -48,7 +69,7 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
       } else if (result === ERR_NOT_ENOUGH_ENERGY) {
          log(
             `needs more energy for T${tier} (${currentEnergy}/${body.length *
-               100})`,
+               COST_PER_PART})`,
             body
          );
       } else if (result === ERR_NAME_EXISTS) {
