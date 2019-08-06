@@ -13,12 +13,12 @@ type TPowerStructures =
    | STRUCTURE_CONTAINER
    | STRUCTURE_POWER_BANK;
 
-export const energyStructureByOrder: TPowerStructures[] = [
+export const ENERGY_STRUCT_BY_NEEDS: TPowerStructures[] = [
    STRUCTURE_EXTENSION,
    STRUCTURE_TOWER,
-   STRUCTURE_SPAWN,
    STRUCTURE_CONTAINER,
    STRUCTURE_POWER_BANK,
+   STRUCTURE_SPAWN,
 ];
 
 export const SHOW_ROLES = false;

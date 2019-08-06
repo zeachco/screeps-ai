@@ -7,6 +7,8 @@ export const run = (creep: ICreep) => {
          s.isActive() && s.energyCapacity > 0 && s.energy < s.energyCapacity,
    });
 
+   // TODO prioritize by ENERGY_STRUCT_BY_NEEDS
+
    if (target) {
       const atempt = creep.transfer(target, RESOURCE_ENERGY);
       if (atempt === ERR_NOT_IN_RANGE) {

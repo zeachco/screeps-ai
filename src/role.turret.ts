@@ -20,7 +20,7 @@ export function turretAI(spawn: ISpawn) {
       }
 
       // if not at war, it contributes
-      const brokenUnits = tower.room
+      const repairTarget = tower.room
          .find(FIND_STRUCTURES, {
             filter: (structure) => structure.hits < structure.hitsMax,
          })
@@ -28,8 +28,8 @@ export function turretAI(spawn: ISpawn) {
             return a.hitsMax - b.hitsMax;
          });
 
-      if (brokenUnits.length) {
-         const randomBrokenUnit = brokenUnits[0];
+      if (repairTarget.length) {
+         const randomBrokenUnit = repairTarget[0];
          tower.repair(randomBrokenUnit);
       }
    });
