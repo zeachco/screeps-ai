@@ -1,33 +1,14 @@
 import { log } from './utils';
 import { ICreep, ISpawn, ICreepMemory } from './types';
-import { MIN_CREEPS, MAX_CREEPS } from './config';
+import { MIN_CREEPS, MAX_CREEPS, BODY_PARTS_PRESET } from './config';
 
 const creepFactory = (budget: number) => {
    const parts: BodyPartConstant[] = [];
    let cost = 0;
    let index = 0;
-   const preset: BodyPartConstant[] = [
-      WORK,
-      CARRY,
-      MOVE,
-      WORK,
-      CARRY,
-      MOVE,
-      WORK,
-      CARRY,
-      MOVE,
-      WORK,
-      CARRY,
-      MOVE,
-      WORK,
-      CARRY,
-      MOVE,
-      ATTACK,
-      MOVE,
-   ];
    while (cost <= budget) {
-      const presetIndex = index % preset.length;
-      const part = preset[presetIndex] || RANGED_ATTACK;
+      const presetIndex = index % BODY_PARTS_PRESET.length;
+      const part = BODY_PARTS_PRESET[presetIndex] || RANGED_ATTACK;
       cost += BODYPART_COST[part];
       if (cost > budget) return parts;
       parts.unshift(part);
