@@ -7,18 +7,19 @@ const creepFactory = (budget: number) => {
    let cost = 0;
    let index = 0;
    const preset: BodyPartConstant[] = [
+      WORK,
       CARRY,
       MOVE,
       WORK,
-      MOVE,
       CARRY,
       MOVE,
       WORK,
-      MOVE,
       CARRY,
       MOVE,
       WORK,
+      CARRY,
       MOVE,
+      WORK,
       CARRY,
       MOVE,
       ATTACK,
