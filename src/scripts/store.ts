@@ -19,8 +19,7 @@ export const ROLE_STORE: IRoleConfig = {
    name: 'store',
    run,
    roomRequirements: ({ room }, cs) =>
-      countCreepsByRole(cs, 'store') < 1 ||
-      room.energyAvailable < 300 ||
-      room.energyAvailable < room.energyCapacityAvailable / 2,
+      countCreepsByRole(cs, 'store') < cs.length / 2 ||
+      room.energyAvailable < 300,
    ...SHOULD_HAVE_ENERGY,
 };
