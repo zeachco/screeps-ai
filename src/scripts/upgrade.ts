@@ -16,6 +16,6 @@ const run = (creep: ICreep) => {
 export const ROLE_UPGRADE: IRoleConfig = {
    name: 'upgrade',
    run,
-   roomRequirements: ({ room }, cs) => true,
+   roomRequirements: () => true,
    ...SHOULD_HAVE_ENERGY,
 };
