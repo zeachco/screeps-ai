@@ -25,12 +25,12 @@ export function turretAI(spawn: ISpawn) {
             filter: (structure) => structure.hits < structure.hitsMax,
          })
          .sort((a, b) => {
-            return a.hitsMax - b.hitsMax;
+            return a.hits - b.hits;
          });
 
       if (repairTarget.length) {
-         const randomBrokenUnit = repairTarget[0];
-         tower.repair(randomBrokenUnit);
+         const firstUnit = repairTarget[0];
+         tower.repair(firstUnit);
       }
    });
 }

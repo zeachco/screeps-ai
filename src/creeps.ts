@@ -2,6 +2,7 @@ import { log } from './utils';
 import { IRoleConfig, ICreep, ISpawn } from './types';
 import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
+import { ROLE_STORE } from './scripts/store';
 
 const findRole = (
    spawn: ISpawn,
@@ -34,7 +35,11 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
       }
 
       // Need a new role?
-      if (role === ROLE_IDLE || role.shouldStop(creep)) {
+      if (
+         role === ROLE_IDLE ||
+         role.shouldStop(creep) ||
+         !role.roomRequirements(spawn, allSpawnCreeps)
+      ) {
          role = findRole(spawn, creep, allSpawnCreeps);
          creep.memory.role = role.name;
          if (role.onStart) {

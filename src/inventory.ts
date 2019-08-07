@@ -47,13 +47,12 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
       });
 
       if (result === OK) {
-         log(`${newName} created`, body);
-      } else if (result === ERR_NOT_ENOUGH_ENERGY) {
          log(
-            `needs more energy for T${tier} (${currentEnergy}/${body.length *
-               COST_PER_PART})`,
-            body
+            `${newName} created`,
+            body.map((b) => `${b}(${BODYPART_COST[b]})`).join(', ')
          );
+      } else if (result === ERR_NOT_ENOUGH_ENERGY) {
+         log(`needs more energy for T${tier} (${currentEnergy})`, body);
       } else if (result === ERR_NAME_EXISTS) {
          log(`Failed to create creep with name ${newName}`);
       } else if (result !== ERR_BUSY) {
