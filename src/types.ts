@@ -10,11 +10,16 @@ export interface IRolesMap {
    [key: string]: IRoleConfig;
 }
 
+export interface IRunnerInjections {
+   spawn: ISpawn;
+   creep: ICreep;
+   creeps: ICreep[];
+}
+
 export interface IRoleConfig {
-   roomRequirements: (spawn: ISpawn, creeps: ICreep[]) => boolean;
-   shouldRun: (creep: ICreep) => boolean;
-   shouldStop: (creep: ICreep) => boolean;
-   onStart?: (creep: ICreep) => any;
+   shouldRun: (injections: IRunnerInjections) => boolean;
+   shouldStop: (injections: IRunnerInjections) => boolean;
+   onStart?: (injections: IRunnerInjections) => any;
    run: (creep: ICreep) => void;
    name: TRoleName;
 }

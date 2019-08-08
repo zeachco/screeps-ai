@@ -1,4 +1,3 @@
-import { log } from './utils';
 import { ICreep, ISpawn } from './types';
 import { turretAI } from './role.turret';
 import { creepRunner } from './creeps';

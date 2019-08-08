@@ -1,4 +1,4 @@
-import { ICreep, IRoleConfig } from '../types';
+import { ICreep, IRoleConfig, IRunnerInjections } from '../types';
 import {
    doesCreepCan,
    moveToOptions,
@@ -36,14 +36,13 @@ interface IStats {
 export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
    run,
-   roomRequirements: (spawn) => true,
-   onStart: (c) => {
+   onStart: ({ creep }: IRunnerInjections) => {
       // TODO smart ressources
 
-      const allCreeps = c.room.find(FIND_MY_CREEPS) as ICreep[];
-      const sources = c.room
+      const allCreeps = creep.room.find(FIND_MY_CREEPS) as ICreep[];
+      const sources = creep.room
          .find(FIND_SOURCES_ACTIVE)
-         .filter((s) => energySpawnHaveEnoughtEnergy(s as any, c));
+         .filter((s) => energySpawnHaveEnoughtEnergy(s as any, creep));
 
       const sourcesStats = allCreeps
          .filter((c: ICreep) => c.memory.role === 'harvest')
@@ -63,10 +62,11 @@ export const ROLE_HARVEST: IRoleConfig = {
          .sort((a, b) => a.creeps - b.creeps);
 
       const index = sourcesByOccupation[0].index;
-      c.say(`harvest[${index}]`);
-      c.memory.targetSourceIndex = index;
+      creep.say(`harvest[${index}]`);
+      creep.memory.targetSourceIndex = index;
    },
-   shouldRun: (c) =>
-      doesCreepCan(c, [WORK, CARRY]) && c.carry.energy < c.carryCapacity,
-   shouldStop: (c) => c.carry.energy === c.carryCapacity,
+   shouldRun: ({ creep }) =>
+      doesCreepCan(creep, [WORK, CARRY]) &&
+      creep.carry.energy < creep.carryCapacity,
+   shouldStop: ({ creep }) => creep.carry.energy === creep.carryCapacity,
 };

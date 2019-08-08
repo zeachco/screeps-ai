@@ -1,21 +1,12 @@
 import { log } from './utils';
-import { IRoleConfig, ICreep, ISpawn } from './types';
+import { IRoleConfig, ICreep, ISpawn, IRunnerInjections } from './types';
 import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
-import { ROLE_STORE } from './scripts/store';
 
-const findRole = (
-   spawn: ISpawn,
-   creep: ICreep,
-   creeps: ICreep[]
-): IRoleConfig => {
-   const roles: IRoleConfig[] = rolesDispatch.filter((need) =>
-      need.roomRequirements(spawn, creeps)
-   );
-
-   for (let i = 0; i < roles.length; i++) {
-      const newRole = roles[i];
-      if (newRole.shouldRun(creep)) {
+const findRole = (inject: IRunnerInjections): IRoleConfig => {
+   for (let i = 0; i < rolesDispatch.length; i++) {
+      const newRole = rolesDispatch[i];
+      if (newRole.shouldRun(inject)) {
          return newRole;
       }
    }
@@ -34,16 +25,18 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
          log(`${creep.name} have unexisting role "${creep.memory.role}"`);
       }
 
+      const inject: IRunnerInjections = {
+         creep,
+         spawn,
+         creeps: allSpawnCreeps,
+      };
+
       // Need a new role?
-      if (
-         role === ROLE_IDLE ||
-         role.shouldStop(creep) ||
-         !role.roomRequirements(spawn, allSpawnCreeps)
-      ) {
-         role = findRole(spawn, creep, allSpawnCreeps);
+      if (role === ROLE_IDLE || role.shouldStop(inject)) {
+         role = findRole(inject);
          creep.memory.role = role.name;
          if (role.onStart) {
-            role.onStart(creep);
+            role.onStart(inject);
          } else {
             creep.say(role.name);
          }

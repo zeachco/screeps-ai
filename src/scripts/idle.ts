@@ -7,7 +7,6 @@ const run = () => {
 export const ROLE_IDLE: IRoleConfig = {
    name: 'idle',
    run,
-   roomRequirements: () => true,
    shouldRun: () => true,
    shouldStop: () => false,
 };

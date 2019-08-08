@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { countCreepsByRole, SHOULD_HAVE_ENERGY, moveToOptions } from '../utils';
+import { countCreepsByRole, moveToOptions } from '../utils';
 
 const run = (creep: ICreep) => {
    if (
@@ -16,7 +16,8 @@ const run = (creep: ICreep) => {
 export const ROLE_UPGRADE: IRoleConfig = {
    name: 'upgrade',
    run,
-   roomRequirements: (_, cs) =>
-      countCreepsByRole(cs, 'upgrade') < cs.length / 2,
-   ...SHOULD_HAVE_ENERGY,
+   shouldRun: ({ creep, creeps }) =>
+      countCreepsByRole(creeps, 'upgrade') < creeps.length / 2 &&
+      creep.carry.energy > 0,
+   shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

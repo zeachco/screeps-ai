@@ -1,5 +1,5 @@
 import { ICreep, IRoleConfig } from '../types';
-import { countCreepsByRole, SHOULD_HAVE_ENERGY, moveToOptions } from '../utils';
+import { countCreepsByRole, moveToOptions } from '../utils';
 
 export const run = (creep: ICreep) => {
    const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
@@ -20,8 +20,8 @@ export const run = (creep: ICreep) => {
 export const ROLE_STORE: IRoleConfig = {
    name: 'store',
    run,
-   roomRequirements: ({ room }, cs) =>
-      countCreepsByRole(cs, 'store') < cs.length / 1 ||
-      room.energyAvailable < 300,
-   ...SHOULD_HAVE_ENERGY,
+   shouldRun: ({ spawn, creeps, creep }) =>
+      countCreepsByRole(creeps, 'store') < creeps.length / 1 ||
+      (spawn.room.energyAvailable < 300 && creep.carry.energy > 0),
+   shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

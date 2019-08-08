@@ -85,11 +85,6 @@ export const doesCreepCan = (
 export const countCreepsByRole = (creeps: ICreep[], role: TRoleName) =>
    creeps.reduce((acc, c) => (c.memory.role === role ? acc + 1 : acc), 0);
 
-export const SHOULD_HAVE_ENERGY = {
-   shouldRun: (c: ICreep) => c.carry.energy > 0,
-   shouldStop: (c: ICreep) => c.carry.energy === 0,
-};
-
 export const moveToOptions = (color = '#000000'): MoveToOpts => ({
    visualizePathStyle: { stroke: color },
    // ignoreCreeps: true,

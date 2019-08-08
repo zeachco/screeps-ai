@@ -1,5 +1,5 @@
-import { ICreep, IRoleConfig } from '../types';
-import { SHOULD_HAVE_ENERGY, countCreepsByRole, moveToOptions } from '../utils';
+import { ICreep, IRoleConfig, IRunnerInjections } from '../types';
+import { countCreepsByRole, moveToOptions } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
@@ -16,8 +16,9 @@ const run = (creep: ICreep) => {
 export const ROLE_BUILD: IRoleConfig = {
    name: 'build',
    run,
-   roomRequirements: ({ room }, cs) =>
-      !!room.find(FIND_MY_CONSTRUCTION_SITES).length &&
-      countCreepsByRole(cs, 'build') < cs.length / 4,
-   ...SHOULD_HAVE_ENERGY,
+   shouldRun: ({ creep, spawn, creeps }: IRunnerInjections) =>
+      creep.carry.energy > 0 &&
+      !!spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length &&
+      countCreepsByRole(creeps, 'build') < creeps.length / 4,
+   shouldStop: ({ creep }) => creep.carry.energy === 0,
 };
