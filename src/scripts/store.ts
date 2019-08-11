@@ -20,8 +20,6 @@ export const run = (creep: ICreep) => {
 export const ROLE_STORE: IRoleConfig = {
    name: 'store',
    run,
-   shouldRun: ({ spawn, creeps, creep }) =>
-      countCreepsByRole(creeps, 'store') < creeps.length / 1 ||
-      (spawn.room.energyAvailable < 300 && creep.carry.energy > 0),
+   shouldRun: ({ spawn, creeps, creep }) => creep.carry.energy > 0 && (countCreepsByRole(creeps, 'store') < creeps.length / 1 || spawn.room.energyAvailable < 300),
    shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

@@ -31,6 +31,9 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
       const currentEnergy = spawn.room.energyAvailable;
       const targetPrice = currentEnergy;
       const body = creepFactory(targetPrice);
+      if (body.length < 3) {
+         return;  
+      }
       const tier = body.length - 2;
 
       if (
