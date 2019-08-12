@@ -14,12 +14,17 @@ export const run = (creep: ICreep) => {
       if (atempt === ERR_NOT_IN_RANGE) {
          creep.moveTo(target, moveToOptions('#ff88ff'));
       }
+   } else {
+      creep.memory.role = 'idle';
    }
 };
 
 export const ROLE_STORE: IRoleConfig = {
    name: 'store',
    run,
-   shouldRun: ({ spawn, creeps, creep }) => creep.carry.energy > 0 && (countCreepsByRole(creeps, 'store') < creeps.length / 1 || spawn.room.energyAvailable < 300),
+   shouldRun: ({ spawn, creeps, creep }) =>
+      creep.carry.energy > 0 &&
+      (countCreepsByRole(creeps, 'store') < creeps.length / 1 ||
+         spawn.room.energyAvailable < 300),
    shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

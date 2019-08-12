@@ -17,7 +17,6 @@ export const ROLE_UPGRADE: IRoleConfig = {
    name: 'upgrade',
    run,
    shouldRun: ({ creep, creeps }) =>
-      countCreepsByRole(creeps, 'upgrade') < creeps.length / 3 &&
-      creep.carry.energy > 0,
+      countCreepsByRole(creeps, 'upgrade') < 1 && creep.carry.energy > 0,
    shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

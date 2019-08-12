@@ -42,6 +42,12 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
          }
       }
 
+      const { ticksToLive = 101 } = creep;
+
+      if (ticksToLive < 100) {
+         creep.say(`${creep.memory.role} (${creep.ticksToLive})`);
+      }
+
       try {
          if (role && role.run) {
             if (SHOW_ROLES) creep.say(role.name);

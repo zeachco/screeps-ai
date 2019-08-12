@@ -22,6 +22,6 @@ export const ROLE_REPAIR: IRoleConfig = {
       creep.carry.energy > 0 &&
       spawn.room.find(FIND_MY_STRUCTURES, { filter: (s) => s.hits < s.hitsMax })
          .length > 0 &&
-      countCreepsByRole(creeps, 'repair') < creeps.length / 4,
+      countCreepsByRole(creeps, 'repair') < 1,
    shouldStop: ({ creep }) => creep.carry.energy === 0,
 };

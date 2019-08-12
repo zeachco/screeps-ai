@@ -10,6 +10,8 @@ const run = (creep: ICreep) => {
       if (creep.build(closestSite) === ERR_NOT_IN_RANGE) {
          creep.moveTo(closestSite, moveToOptions('#ff00ff'));
       }
+   } else {
+      creep.memory.role = 'idle';
    }
 };
 
@@ -19,6 +21,8 @@ export const ROLE_BUILD: IRoleConfig = {
    shouldRun: ({ creep, spawn, creeps }: IRunnerInjections) =>
       creep.carry.energy > 0 &&
       !!spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length &&
-      countCreepsByRole(creeps, 'build') < creeps.length / 4,
-   shouldStop: ({ creep }) => creep.carry.energy === 0,
+      countCreepsByRole(creeps, 'build') < 1,
+   shouldStop: ({ creep, spawn }) =>
+      creep.carry.energy === 0 ||
+      !spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length,
 };
