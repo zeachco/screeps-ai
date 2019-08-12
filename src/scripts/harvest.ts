@@ -2,8 +2,6 @@ import { ICreep, IRoleConfig, IRunnerInjections } from '../types';
 import {
    doesCreepCan,
    moveToOptions,
-   random,
-   arrayFill,
    createMapFromArray,
    energySpawnHaveEnoughtEnergy,
 } from '../utils';
