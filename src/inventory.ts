@@ -35,6 +35,7 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
          return;  
       }
       const tier = body.length - 2;
+      const totalCost = body.reduce((acc, b) => acc + BODYPART_COST[b], 0);
 
       if (
          !spawn.memory.creepId ||
@@ -51,7 +52,7 @@ export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
 
       if (result === OK) {
          log(
-            `${newName} created`,
+            `${newName} created for ${totalCost}\n`,
             body.map((b) => `${b}(${BODYPART_COST[b]})`).join(', ')
          );
       } else if (result === ERR_NOT_ENOUGH_ENERGY) {
