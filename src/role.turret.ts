@@ -19,6 +19,10 @@ export function turretAI(spawn: ISpawn) {
          return;
       }
 
+      if (tower.energy < 250) {
+         return;
+      }
+
       // if not at war, it contributes
       const repairTarget = tower.room
          .find(FIND_STRUCTURES, {

@@ -7,6 +7,13 @@ import {
 } from '../utils';
 
 const run = (creep: ICreep) => {
+   if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 50) {
+      if (creep.carry.energy === 0) {
+         creep.suicide();
+      } else {
+         creep.memory.role = 'idle';
+      }
+   }
    // first pick decaying resources
    const targets = creep.room.find(FIND_DROPPED_RESOURCES);
    if (targets.length) {
