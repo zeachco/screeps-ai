@@ -22,6 +22,7 @@ export interface IRoleConfig {
    onStart?: (injections: IRunnerInjections) => any;
    run: (creep: ICreep) => void;
    name: TRoleName;
+   getPriority?: (injections: IRunnerInjections) => number;
 }
 
 export interface ICreepMemory extends CreepMemory {

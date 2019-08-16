@@ -1,5 +1,6 @@
 import { findStructureAroundSpawn, log } from './utils';
 import { ISpawn } from './types';
+import { MIN_STRUCTURE_HITS } from './config';
 
 export function turretAI(spawn: ISpawn) {
    findStructureAroundSpawn(spawn, STRUCTURE_TOWER).forEach((tower) => {
@@ -26,7 +27,9 @@ export function turretAI(spawn: ISpawn) {
       // if not at war, it contributes
       const repairTarget = tower.room
          .find(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax,
+            filter: (structure) =>
+               structure.hits < structure.hitsMax &&
+               structure.hits < MIN_STRUCTURE_HITS,
          })
          .sort((a, b) => {
             return a.hits - b.hits;

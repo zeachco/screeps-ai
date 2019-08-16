@@ -21,6 +21,7 @@ export const ENERGY_STRUCT_BY_NEEDS: TPowerStructures[] = [
    STRUCTURE_SPAWN,
 ];
 
+export const MIN_STRUCTURE_HITS = 1000000;
 export const SHOW_ROLES = !true;
 export const CREEPS_PER_TIERS = 1;
 export const MIN_CREEPS = 3;

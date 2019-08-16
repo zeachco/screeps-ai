@@ -37,7 +37,7 @@ const findBestEnergySource = (creep: ICreep) => {
 };
 
 const run = (creep: ICreep) => {
-   if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 100) {
+   if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 75) {
       if (creep.carry.energy === 0) {
          creep.suicide();
       } else {
