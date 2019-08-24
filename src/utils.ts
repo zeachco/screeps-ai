@@ -89,3 +89,6 @@ export const moveToOptions = (color = '#000000'): MoveToOpts => ({
    visualizePathStyle: { stroke: color },
    // ignoreCreeps: true,
 });
+
+export const ttl = (creep: ICreep) =>
+   typeof creep.ticksToLive === 'number' ? creep.ticksToLive : -1;

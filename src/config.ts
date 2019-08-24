@@ -5,6 +5,7 @@ import { ROLE_REPAIR } from './scripts/repair';
 import { ROLE_HARVEST } from './scripts/harvest';
 import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
+import { ROLE_EXPLORE } from './scripts/explorer';
 
 type TPowerStructures =
    | STRUCTURE_SPAWN
@@ -22,7 +23,7 @@ export const ENERGY_STRUCT_BY_NEEDS: TPowerStructures[] = [
 ];
 
 export const MIN_STRUCTURE_HITS = 1000000;
-export const SHOW_ROLES = !true;
+export const SHOW_ROLES = true;
 export const CREEPS_PER_TIERS = 1;
 export const MIN_CREEPS = 3;
 export const MAX_CREEPS = 7;
@@ -36,10 +37,11 @@ const r = (part: BodyPartConstant, count: number) => {
 };
 
 export const rolesDispatch: IRoleConfig[] = [
-   ROLE_UPGRADE,
-   ROLE_STORE,
-   ROLE_REPAIR,
+   ROLE_EXPLORE,
    ROLE_BUILD,
+   ROLE_STORE,
+   ROLE_UPGRADE,
+   ROLE_REPAIR,
    ROLE_HARVEST,
    ROLE_IDLE,
 ];
@@ -70,4 +72,5 @@ export const BODY_PARTS_PRESET: BodyPartConstant[] = [
    MOVE,
    ATTACK,
    MOVE,
+   CLAIM,
 ];

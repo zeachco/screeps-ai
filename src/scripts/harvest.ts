@@ -86,5 +86,7 @@ export const ROLE_HARVEST: IRoleConfig = {
    shouldRun: ({ creep }) =>
       doesCreepCan(creep, [WORK, CARRY]) &&
       creep.carry.energy < creep.carryCapacity,
-   shouldStop: ({ creep }) => creep.carry.energy === creep.carryCapacity,
+   shouldStop: ({ creep }) =>
+      // TODO calculate other ressources
+      creep.carry.energy === creep.carryCapacity,
 };

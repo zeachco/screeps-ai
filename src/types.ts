@@ -4,6 +4,7 @@ export type TRoleName =
    | 'store'
    | 'build'
    | 'upgrade'
+   | 'explore'
    | 'repair';
 
 export interface IRolesMap {
