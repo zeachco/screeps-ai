@@ -5,7 +5,7 @@ import { ROLE_REPAIR } from './scripts/repair';
 import { ROLE_HARVEST } from './scripts/harvest';
 import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
-import { ROLE_EXPLORE } from './scripts/explorer';
+import { ROLE_CLAIM } from './scripts/claim';
 
 // TODO Transfer everythin into the room or controller memory
 
@@ -39,9 +39,9 @@ const r = (part: BodyPartConstant, count: number) => {
 };
 
 export const rolesDispatch: IRoleConfig[] = [
-   ROLE_EXPLORE,
-   ROLE_BUILD,
+   ROLE_CLAIM,
    ROLE_STORE,
+   ROLE_BUILD,
    ROLE_UPGRADE,
    ROLE_REPAIR,
    ROLE_HARVEST,
