@@ -92,3 +92,14 @@ export const moveToOptions = (color = '#000000'): MoveToOpts => ({
 
 export const ttl = (creep: ICreep) =>
    typeof creep.ticksToLive === 'number' ? creep.ticksToLive : -1;
+
+export const getCreepUsedCargo = (creep: ICreep): number => {
+   type TElements = keyof (typeof creep.carry);
+   const elements = Object.keys(creep.carry) as TElements[];
+   return elements.reduce((remaining: number, element: TElements) => {
+      return remaining + (creep.carry[element] || 0);
+   }, 0);
+};
+
+export const getCreepAvailableSpace = (creep: ICreep): number =>
+   creep.carryCapacity - getCreepUsedCargo(creep);

@@ -12,9 +12,10 @@ import { manageSpawn } from './spawns';
 // export default loop;
 
 // const explorer = Game.getObjectById('5d613b0c09062063654d755a') as ICreep;
-// explorer.moveTo(49, 26);
+// // explorer.moveTo(49, 26);
 
 // const ctrl = explorer.room.controller as StructureController;
+// ctrl.room.memory
 
 // if (!ctrl.owner) {
 //    const doReserve = explorer.reserveController(explorer.room

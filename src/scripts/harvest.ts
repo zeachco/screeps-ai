@@ -4,6 +4,7 @@ import {
    moveToOptions,
    createMapFromArray,
    energySpawnHaveEnoughtEnergy,
+   getCreepAvailableSpace,
 } from '../utils';
 
 const findBestEnergySource = (creep: ICreep) => {
@@ -84,9 +85,6 @@ export const ROLE_HARVEST: IRoleConfig = {
    run,
    onStart: ({ creep }: IRunnerInjections) => creep,
    shouldRun: ({ creep }) =>
-      doesCreepCan(creep, [WORK, CARRY]) &&
-      creep.carry.energy < creep.carryCapacity,
-   shouldStop: ({ creep }) =>
-      // TODO calculate other ressources
-      creep.carry.energy === creep.carryCapacity,
+      doesCreepCan(creep, [WORK, CARRY]) && getCreepAvailableSpace(creep) > 0,
+   shouldStop: ({ creep }) => !getCreepAvailableSpace(creep),
 };

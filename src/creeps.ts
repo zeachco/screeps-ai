@@ -44,13 +44,15 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
 
       const { ticksToLive = 101 } = creep;
 
-      if (ticksToLive < 100 || true) {
+      if (ticksToLive < 100) {
          creep.say(`${creep.ticksToLive} ${creep.memory.role}`);
       }
 
       try {
          if (role && role.run) {
-            // if (SHOW_ROLES) creep.say(role.name);
+            if (SHOW_ROLES) {
+               creep.say(`${creep.ticksToLive} ${creep.memory.role}`);
+            }
             role.run(creep);
          } else {
             throw 'Missing run script in config';

@@ -7,6 +7,8 @@ import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
 import { ROLE_EXPLORE } from './scripts/explorer';
 
+// TODO Transfer everythin into the room or controller memory
+
 type TPowerStructures =
    | STRUCTURE_SPAWN
    | STRUCTURE_TOWER
@@ -23,7 +25,7 @@ export const ENERGY_STRUCT_BY_NEEDS: TPowerStructures[] = [
 ];
 
 export const MIN_STRUCTURE_HITS = 1000000;
-export const SHOW_ROLES = true;
+export const SHOW_ROLES = !true;
 export const CREEPS_PER_TIERS = 1;
 export const MIN_CREEPS = 3;
 export const MAX_CREEPS = 7;
