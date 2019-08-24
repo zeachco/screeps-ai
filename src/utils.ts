@@ -103,3 +103,12 @@ export const getCreepUsedCargo = (creep: ICreep): number => {
 
 export const getCreepAvailableSpace = (creep: ICreep): number =>
    creep.carryCapacity - getCreepUsedCargo(creep);
+
+export function getCreepsByRole(spawn: ISpawn, role: TRoleName): ICreep[] {
+   if (!spawn.memory.roles) {
+      return [];
+   }
+   return spawn.memory.roles[role]
+      .map((id) => Game.getObjectById(id) as ICreep)
+      .filter((creep) => !!creep && creep.memory.role === role);
+}

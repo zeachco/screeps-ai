@@ -43,9 +43,14 @@ export interface ISpawnStats {
    build: number;
 }
 
+type TObjectID = string;
+
 export interface ISpawnMemory extends SpawnMemory {
    stats: ISpawnStats;
    creepId: number;
+   roles: {
+      [key: string]: TObjectID[];
+   };
 }
 
 export interface ISpawn extends StructureSpawn {

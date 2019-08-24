@@ -32,6 +32,35 @@ const run = (creep: ICreep) => {
    // }
 };
 
+// export function loop() {
+//    console.log('test');
+// }
+
+// const other = Game.getObjectById('5d613db142c42a63a0437aa5') as ICreep;
+// other.moveTo(new RoomPosition(6, 21, Game.spawns.Spawn1.room.name));
+
+// export default loop;
+
+// const explorer = Game.getObjectById('5d613b0c09062063654d755a') as ICreep;
+// // explorer.moveTo(49, 26);
+
+// const ctrl = explorer.room.controller as StructureController;
+// ctrl.room.memory
+
+// if (!ctrl.owner) {
+//    const doReserve = explorer.reserveController(explorer.room
+//       .controller as StructureController);
+
+//    console.log('reserve', doReserve);
+
+//    if (doReserve === ERR_NOT_IN_RANGE) {
+//       explorer.moveTo(
+//          explorer.room.controller as StructureController,
+//          moveToOptions('#ff0000')
+//       );
+//    }
+// }
+
 export const ROLE_CLAIM: IRoleConfig = {
    name: 'claim',
    run,
@@ -42,4 +71,7 @@ export const ROLE_CLAIM: IRoleConfig = {
       ttl(creep) > 800,
    shouldStop: ({ creep, creeps }) =>
       countCreepsByRole(creeps, 'claim') > 1 || ttl(creep) < 500,
+   onStart({ creep, spawn }) {
+      spawn.memory;
+   },
 };
