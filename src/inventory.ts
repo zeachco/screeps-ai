@@ -1,5 +1,5 @@
 import { log } from './utils';
-import { ICreep, ICreepMemory, IRoom } from './types';
+import { ICreep, IRoom, DEFAULT_CREEP_MEMORY } from './types';
 import { MIN_CREEPS, MAX_CREEPS, BODY_PARTS_PRESET } from './config';
 
 const creepFactory = (budget: number) => {
@@ -15,11 +15,6 @@ const creepFactory = (budget: number) => {
       index++;
    }
    return parts;
-};
-
-const DEFAULT_MEMORY: ICreepMemory = {
-   role: 'idle',
-   targetSourceIndex: 0,
 };
 
 export function manageInventory(room: IRoom, creeps: ICreep[]) {
@@ -53,7 +48,7 @@ export function manageInventory(room: IRoom, creeps: ICreep[]) {
       });
 
       const result = spawns[0].spawnCreep(body, newName, {
-         memory: DEFAULT_MEMORY,
+         memory: DEFAULT_CREEP_MEMORY,
       });
 
       if (result === OK) {

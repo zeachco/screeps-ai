@@ -19,6 +19,7 @@ export const DEFAULT_ROOM_MEMORY = {
       store: idList,
       defend: idList,
       upgrade: idList,
+      claim: idList,
    } as { [key: string]: string[] },
 };
 
@@ -51,13 +52,13 @@ export interface IRoleConfig {
    getPriority?: (injections: IRunnerInjections) => number;
 }
 
-export interface ICreepMemory extends CreepMemory {
-   role: TRoleName;
-   targetSourceIndex: number;
-}
+export const DEFAULT_CREEP_MEMORY = {
+   role: 'idle' as TRoleName,
+   targetSourceIndex: 0,
+};
 
 export interface ICreep extends Creep {
-   memory: ICreepMemory;
+   memory: typeof DEFAULT_CREEP_MEMORY;
 }
 
 type TObjectID = string;
