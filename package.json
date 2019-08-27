@@ -13,6 +13,14 @@
    "license": "ISC",
    "devDependencies": {
       "@babel/core": "^7.5.5",
+      "@babel/plugin-proposal-class-properties": "^7.5.5",
+      "@babel/plugin-proposal-decorators": "^7.4.4",
+      "@babel/plugin-proposal-export-namespace-from": "^7.5.2",
+      "@babel/plugin-proposal-function-sent": "^7.5.0",
+      "@babel/plugin-proposal-json-strings": "^7.2.0",
+      "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+      "@babel/plugin-proposal-throw-expressions": "^7.2.0",
+      "@babel/plugin-syntax-import-meta": "^7.2.0",
       "@babel/preset-env": "^7.5.5",
       "@babel/preset-typescript": "^7.3.3",
       "@babel/register": "^7.5.5",
@@ -29,5 +37,8 @@
       "typescript": "^3.5.3",
       "webpack": "^4.39.1",
       "webpack-cli": "^3.3.6"
+   },
+   "dependencies": {
+      "core-js": "^3.2.1"
    }
 }

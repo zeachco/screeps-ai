@@ -28,7 +28,7 @@ export const MIN_STRUCTURE_HITS = 1000000;
 export const SHOW_ROLES = !true;
 export const CREEPS_PER_TIERS = 1;
 export const MIN_CREEPS = 3;
-export const MAX_CREEPS = 7;
+export const MAX_CREEPS = 15;
 
 const r = (part: BodyPartConstant, count: number) => {
    const parts: BodyPartConstant[] = [];
@@ -40,10 +40,10 @@ const r = (part: BodyPartConstant, count: number) => {
 
 export const rolesDispatch: IRoleConfig[] = [
    ROLE_CLAIM,
-   ROLE_STORE,
    ROLE_BUILD,
    ROLE_UPGRADE,
    ROLE_REPAIR,
+   ROLE_STORE,
    ROLE_HARVEST,
    ROLE_IDLE,
 ];
@@ -74,5 +74,6 @@ export const BODY_PARTS_PRESET: BodyPartConstant[] = [
    MOVE,
    ATTACK,
    MOVE,
-   CLAIM,
+   CARRY,
+   // CLAIM,
 ];

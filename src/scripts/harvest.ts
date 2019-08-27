@@ -3,17 +3,17 @@ import {
    doesCreepCan,
    moveToOptions,
    createMapFromArray,
-   energySpawnHaveEnoughtEnergy,
+   energySourceQualifiesForCreep,
    getCreepAvailableSpace,
 } from '../utils';
 
-const findBestEnergySource = (creep: ICreep) => {
+export const findBestEnergySource = (creep: ICreep) => {
    // TODO smart ressources
 
    const allCreeps = creep.room.find(FIND_MY_CREEPS) as ICreep[];
    const sources = creep.room
       .find(FIND_SOURCES_ACTIVE)
-      .filter((s) => energySpawnHaveEnoughtEnergy(s as any, creep));
+      .filter((s) => energySourceQualifiesForCreep(s as any, creep));
 
    const sourcesStats = allCreeps
       .filter((c: ICreep) => c.memory.role === 'harvest')

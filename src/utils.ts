@@ -19,23 +19,10 @@ export const createMapFromArray = (arr: any[], fill: any = 0) => {
    return map;
 };
 
-export const energySpawnHaveEnoughtEnergy = (
+export const energySourceQualifiesForCreep = (
    eSpawn: StructurePowerSpawn,
    creep: ICreep
-) => creep.body.filter((b) => b.type === CARRY).length * 50 < eSpawn.energy;
-
-export function harvestSourceBasedOfIndex(creep: Creep, index: number) {
-   const sources = creep.room.find(FIND_SOURCES);
-   const selectIndex = index % sources.length;
-
-   const target = sources[selectIndex];
-
-   if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(target, {
-         visualizePathStyle: { stroke: '#ffaa00' },
-      });
-   }
-}
+) => getCreepAvailableSpace(creep) <= eSpawn.energy;
 
 export function log(...arg: any[]) {
    console.log(...arg);
@@ -50,12 +37,12 @@ export function clean() {
    }
 }
 
-export const findStructureAroundSpawn = (
+export const findStructureAroundSpawn = <T>(
    spawn: ISpawn,
    structureType?: string,
    from = FIND_MY_STRUCTURES
-): StructureTower[] => {
-   let towers: StructureTower[] = [];
+): T[] => {
+   let structures: T[] = [];
 
    let options: any = {};
 
@@ -63,12 +50,12 @@ export const findStructureAroundSpawn = (
       options.filter = { structureType };
    }
 
-   towers = spawn.room.find(from, options) as StructureTower[];
-   if (!towers.length) {
-      log(`Warning: no tower(s) found around ${spawn.name}`);
-   }
+   structures = spawn.room.find(from, options) as any[];
+   // if (!structures.length) {
+   //    log(`Warning: no ${structureType}(s) found around ${spawn.name}`);
+   // }
 
-   return towers;
+   return structures as T[];
 };
 
 export const getBodyParts = (creep: ICreep) => creep.body.map((b) => b.type);
@@ -111,4 +98,26 @@ export function getCreepsByRole(spawn: ISpawn, role: TRoleName): ICreep[] {
    return spawn.memory.roles[role]
       .map((id) => Game.getObjectById(id) as ICreep)
       .filter((creep) => !!creep && creep.memory.role === role);
+}
+
+export function getObjects<T>(ids: string[]) {
+   return ids.map((id) => Game.getObjectById(id)) as T[];
+}
+
+interface IMemoryObj {
+   [key: string]: any;
+}
+export function prepareMemory<T>(
+   obj: { memory: IMemoryObj },
+   defaultMem: IMemoryObj
+) {
+   // if we have at least one key,
+   // let's skip setting up the memory
+   for (const key in obj.memory) {
+      return (obj as any) as T;
+   }
+
+   obj.memory = defaultMem;
+
+   return (obj as any) as T;
 }
