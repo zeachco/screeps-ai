@@ -71,7 +71,10 @@ export const ROLE_CLAIM: IRoleConfig = {
       ttl(creep) > 800,
    shouldStop: ({ creep, creeps }) =>
       countCreepsByRole(creeps, 'claim') > 1 || ttl(creep) < 500,
-   onStart({ creep, spawn }) {
-      spawn.memory;
+   onStart({ creep, room }) {
+      // TODO create path to next room
+   },
+   getPriority() {
+      return 0;
    },
 };

@@ -9,4 +9,7 @@ export const ROLE_IDLE: IRoleConfig = {
    run,
    shouldRun: () => true,
    shouldStop: () => false,
+   getPriority() {
+      return -1;
+   },
 };

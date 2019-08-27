@@ -38,13 +38,6 @@ export const findBestEnergySource = (creep: ICreep) => {
 };
 
 const run = (creep: ICreep) => {
-   if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 75) {
-      if (creep.carry.energy === 0) {
-         creep.suicide();
-      } else {
-         creep.memory.role = 'idle';
-      }
-   }
    // first pick decaying resources
    const targets = creep.room.find(FIND_DROPPED_RESOURCES);
    if (targets.length) {
@@ -83,8 +76,16 @@ interface IStats {
 export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
    run,
-   onStart: ({ creep }: IRunnerInjections) => creep,
-   shouldRun: ({ creep }) =>
-      doesCreepCan(creep, [WORK, CARRY]) && getCreepAvailableSpace(creep) > 0,
-   shouldStop: ({ creep }) => !getCreepAvailableSpace(creep),
+   // onStart: ({ creep }: IRunnerInjections) => creep,
+   shouldRun({ creep }) {
+      return (
+         doesCreepCan(creep, [WORK, CARRY]) && getCreepAvailableSpace(creep) > 0
+      );
+   },
+   shouldStop({ creep }) {
+      return !getCreepAvailableSpace(creep);
+   },
+   getPriority() {
+      return 0;
+   },
 };

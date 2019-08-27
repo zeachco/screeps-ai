@@ -30,4 +30,14 @@ export const ROLE_STORE: IRoleConfig = {
       );
    },
    shouldStop: ({ creep }) => creep.carry.energy === 0,
+   getPriority({ room }) {
+      let score = 0;
+      if (room.energyAvailable < 300) {
+         score += 25;
+      }
+      if (room.energyAvailable < room.energyCapacityAvailable) {
+         score += 1;
+      }
+      return score / (room.memory.roles.store.length || 1);
+   },
 };
