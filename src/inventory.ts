@@ -1,5 +1,5 @@
 import { log } from './utils';
-import { ICreep, ISpawn, ICreepMemory } from './types';
+import { ICreep, ICreepMemory, IRoom } from './types';
 import { MIN_CREEPS, MAX_CREEPS, BODY_PARTS_PRESET } from './config';
 
 const creepFactory = (budget: number) => {
@@ -22,31 +22,37 @@ const DEFAULT_MEMORY: ICreepMemory = {
    targetSourceIndex: 0,
 };
 
-export function manageInventory(spawn: ISpawn, creeps: ICreep[]) {
+export function manageInventory(room: IRoom, creeps: ICreep[]) {
    const roomCapacityFull =
       creeps.length < MAX_CREEPS &&
-      spawn.room.energyAvailable === spawn.room.energyCapacityAvailable;
+      room.energyAvailable === room.energyCapacityAvailable;
 
    if (creeps.length < MIN_CREEPS || roomCapacityFull) {
-      const currentEnergy = spawn.room.energyAvailable;
+      const currentEnergy = room.energyAvailable;
       const targetPrice = currentEnergy;
       const body = creepFactory(targetPrice);
       if (body.length < 3) {
-         return;  
+         return;
       }
       const tier = body.length - 2;
       const totalCost = body.reduce((acc, b) => acc + BODYPART_COST[b], 0);
 
       if (
-         !spawn.memory.creepId ||
+         !room.memory.nextCreepId ||
          Math.min(...creeps.map((c) => +c.name.split('_')[1])) > MIN_CREEPS
       ) {
-         spawn.memory.creepId = 0;
+         room.memory.nextCreepId = 0;
       }
 
-      const newName = `T${tier}_${spawn.memory.creepId++}`;
+      const newName = `T${tier}_${room.memory.nextCreepId++}`;
 
-      const result = spawn.spawnCreep(body, newName, {
+      const spawns = room.find(FIND_MY_SPAWNS, {
+         filter(spawn) {
+            return !spawn.spawning;
+         },
+      });
+
+      const result = spawns[0].spawnCreep(body, newName, {
          memory: DEFAULT_MEMORY,
       });
 

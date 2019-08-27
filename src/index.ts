@@ -1,15 +1,10 @@
 import { clean } from './utils';
-// import { ISpawn } from './types';
-// import { manageSpawn } from './spawns';
-import { updateRoom } from './updates/room';
+import { IRoom } from './types';
+import { manageRoom } from './spawns';
 
 clean();
 
 for (const name in Game.rooms) {
-   const room = Game.rooms[name];
-   updateRoom(room);
+   const room = Game.rooms[name] as IRoom;
+   manageRoom(room);
 }
-
-// Object.keys(Game.spawns).forEach((name) =>
-//    manageSpawn(Game.spawns[name] as ISpawn)
-// );

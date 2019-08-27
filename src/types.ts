@@ -13,6 +13,7 @@ const idList = [] as string[];
 export const DEFAULT_ROOM_MEMORY = {
    energySources: ['unknown'] as string[],
    spawns: [] as string[],
+   nextCreepId: 0,
    roles: {
       harvest: idList,
       store: idList,
@@ -31,7 +32,7 @@ export interface IRolesMap {
 
 export interface IRunnerInjections {
    room: IRoom;
-   spawn: ISpawn;
+   spawn?: ISpawn;
    creep: ICreep;
    creeps: ICreep[];
 }
@@ -59,18 +60,9 @@ export interface ICreep extends Creep {
    memory: ICreepMemory;
 }
 
-export interface ISpawnStats {
-   total: number;
-   harvest: number;
-   store: number;
-   upgrade: number;
-   build: number;
-}
-
 type TObjectID = string;
 
 export interface ISpawnMemory extends SpawnMemory {
-   stats: ISpawnStats;
    creepId: number;
    roles: {
       [key: string]: TObjectID[];

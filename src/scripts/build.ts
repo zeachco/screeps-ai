@@ -18,11 +18,10 @@ const run = (creep: ICreep) => {
 export const ROLE_BUILD: IRoleConfig = {
    name: 'build',
    run,
-   shouldRun: ({ creep, spawn, creeps }: IRunnerInjections) =>
+   shouldRun: ({ creep, room, creeps }: IRunnerInjections) =>
       creep.carry.energy > 0 &&
-      !!spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length &&
+      !!room.find(FIND_MY_CONSTRUCTION_SITES).length &&
       countCreepsByRole(creeps, 'build') < creeps.length / 3,
-   shouldStop: ({ creep, spawn }) =>
-      creep.carry.energy === 0 ||
-      !spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length,
+   shouldStop: ({ creep, room }) =>
+      creep.carry.energy === 0 || !room.find(FIND_MY_CONSTRUCTION_SITES).length,
 };

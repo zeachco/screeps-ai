@@ -1,5 +1,5 @@
 import { log } from './utils';
-import { IRoleConfig, ICreep, ISpawn, IRunnerInjections, IRoom } from './types';
+import { IRoleConfig, ICreep, IRunnerInjections, IRoom } from './types';
 import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
 
@@ -14,7 +14,7 @@ const findRole = (inject: IRunnerInjections): IRoleConfig => {
    return ROLE_IDLE;
 };
 
-export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
+export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
    allSpawnCreeps.forEach((creep) => {
       if (creep.memory.role === 'manual') {
          return;
@@ -30,8 +30,7 @@ export const creepRunner = (spawn: ISpawn, allSpawnCreeps: ICreep[]) => {
 
       const inject: IRunnerInjections = {
          creep,
-         spawn,
-         room: spawn.room as IRoom,
+         room,
          creeps: allSpawnCreeps,
       };
 

@@ -1,28 +1,32 @@
-import { ICreep, TRoleName, ISpawn } from './types';
+import { ICreep, TRoleName, IRoom } from './types';
 
-export const random = (max: number, min = 0) =>
-   Math.round(Math.random() * (max - min));
+export function random(max: number, min = 0) {
+   return Math.round(Math.random() * (max - min));
+}
 
-export const arrayFill = (
+export function arrayFill(
    count: number,
    fn: (index?: number) => any = (i) => i
-) =>
-   Array(count)
+) {
+   return Array(count)
       .fill(undefined)
       .map((_, i) => fn(i));
+}
 
-export const createMapFromArray = (arr: any[], fill: any = 0) => {
+export function createMapFromArray(arr: any[], fill: any = 0) {
    const map = {} as any;
    for (const i in arr) {
       map[i] = fill;
    }
    return map;
-};
+}
 
-export const energySourceQualifiesForCreep = (
+export function energySourceQualifiesForCreep(
    eSpawn: StructurePowerSpawn,
    creep: ICreep
-) => getCreepAvailableSpace(creep) <= eSpawn.energy;
+) {
+   return getCreepAvailableSpace(creep) <= eSpawn.energy;
+}
 
 export function log(...arg: any[]) {
    console.log(...arg);
@@ -37,11 +41,11 @@ export function clean() {
    }
 }
 
-export const findStructureAroundSpawn = <T>(
-   spawn: ISpawn,
+export function findStructureAroundSpawn<T>(
+   room: Room,
    structureType?: string,
    from = FIND_MY_STRUCTURES
-): T[] => {
+): T[] {
    let structures: T[] = [];
 
    let options: any = {};
@@ -50,32 +54,38 @@ export const findStructureAroundSpawn = <T>(
       options.filter = { structureType };
    }
 
-   structures = spawn.room.find(from, options) as any[];
+   structures = room.find(from, options) as any[];
    // if (!structures.length) {
    //    log(`Warning: no ${structureType}(s) found around ${spawn.name}`);
    // }
 
    return structures as T[];
-};
+}
 
-export const getBodyParts = (creep: ICreep) => creep.body.map((b) => b.type);
+export function getBodyParts(creep: ICreep) {
+   return creep.body.map((b) => b.type);
+}
 
-export const doesCreepCan = (
-   creep: ICreep,
-   partsRequired: BodyPartConstant[]
-) =>
-   partsRequired.reduce(
+export function doesCreepCan(creep: ICreep, partsRequired: BodyPartConstant[]) {
+   return partsRequired.reduce(
       (ok, part) => ok && creep.body.map((b) => b.type).indexOf(part) !== -1,
       true
    );
+}
 
-export const countCreepsByRole = (creeps: ICreep[], role: TRoleName) =>
-   creeps.reduce((acc, c) => (c.memory.role === role ? acc + 1 : acc), 0);
+export function countCreepsByRole(creeps: ICreep[], role: TRoleName) {
+   return creeps.reduce(
+      (acc, c) => (c.memory.role === role ? acc + 1 : acc),
+      0
+   );
+}
 
-export const moveToOptions = (color = '#000000'): MoveToOpts => ({
-   visualizePathStyle: { stroke: color },
-   // ignoreCreeps: true,
-});
+export function moveToOptions(color = '#000000'): MoveToOpts {
+   return {
+      visualizePathStyle: { stroke: color },
+      // ignoreCreeps: true,
+   };
+}
 
 export const ttl = (creep: ICreep) =>
    typeof creep.ticksToLive === 'number' ? creep.ticksToLive : -1;
@@ -91,11 +101,8 @@ export const getCreepUsedCargo = (creep: ICreep): number => {
 export const getCreepAvailableSpace = (creep: ICreep): number =>
    creep.carryCapacity - getCreepUsedCargo(creep);
 
-export function getCreepsByRole(spawn: ISpawn, role: TRoleName): ICreep[] {
-   if (!spawn.memory.roles) {
-      return [];
-   }
-   return spawn.memory.roles[role]
+export function getCreepsByRole(room: IRoom, role: TRoleName): ICreep[] {
+   return room.memory.roles[role]
       .map((id) => Game.getObjectById(id) as ICreep)
       .filter((creep) => !!creep && creep.memory.role === role);
 }

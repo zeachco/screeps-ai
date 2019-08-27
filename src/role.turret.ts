@@ -2,8 +2,8 @@ import { findStructureAroundSpawn, log } from './utils';
 import { ISpawn, ICreep } from './types';
 import { MIN_STRUCTURE_HITS, MAX_CREEPS } from './config';
 
-export function turretAI(spawn: ISpawn, creeps: ICreep[]) {
-   findStructureAroundSpawn<StructureTower>(spawn, STRUCTURE_TOWER).forEach(
+export function turretAI(room: Room, creeps: ICreep[]) {
+   findStructureAroundSpawn<StructureTower>(room, STRUCTURE_TOWER).forEach(
       (tower) => {
          const closestHostile = tower.pos.findClosestByRange(
             FIND_HOSTILE_CREEPS
