@@ -39,6 +39,20 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
       }
    );
 
+   room.visual.text(
+      sortedRoles
+         .filter((r) => room.memory.roles[r.name])
+         .map(
+            (r) => `${room.memory.roles[r.name].length}${r.name.substr(0, 3)}`
+         )
+         .join(', '),
+      ctrl.pos.x + 1,
+      ctrl.pos.y + 1,
+      {
+         align: 'left',
+      }
+   );
+
    allSpawnCreeps.forEach((creep) => {
       if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 75) {
          // TODO go recycle / relive to spawn
@@ -89,7 +103,7 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
       if (ticksToLive < 100) {
          creep.say(`${creep.ticksToLive} ${creep.memory.role}`);
       }
-
+      // TOO update stats
       try {
          if (role && role.run) {
             if (SHOW_ROLES) {

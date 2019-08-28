@@ -19,7 +19,10 @@ export const DEFAULT_ROOM_MEMORY = {
       store: idList,
       defend: idList,
       upgrade: idList,
+      repair: idList,
+      build: idList,
       claim: idList,
+      idle: idList,
    } as { [key: string]: string[] },
 };
 
