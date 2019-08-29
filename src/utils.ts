@@ -29,7 +29,21 @@ export function energySourceQualifiesForCreep(
 }
 
 export function log(...arg: any[]) {
-   console.log(...arg);
+   console.log(
+      ...arg.map((v) => {
+         if (typeof v === 'object') {
+            if (Array.isArray(v)) {
+               return v
+                  .map((vv, index) => `${index} ${JSON.stringify(vv)}`)
+                  .join('\n');
+            } else {
+               return JSON.stringify(v);
+            }
+         } else {
+            return v;
+         }
+      })
+   );
 }
 
 export function clean() {

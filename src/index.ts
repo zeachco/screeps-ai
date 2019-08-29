@@ -1,5 +1,5 @@
 import { clean } from './utils';
-import { manageRoom } from './spawns';
+import { manageRoom } from './room';
 
 clean();
 
