@@ -2,6 +2,7 @@ import { log } from './utils';
 import { IRoleConfig, ICreep, IRunnerInjections, IRoom } from './types';
 import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
+import { manageDyingCreep } from './inventory';
 
 const findRole = (inject: IRunnerInjections): IRoleConfig => {
    const sortedRoles = rolesDispatch.sort(
@@ -53,32 +54,24 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
       }
    );
 
+   // const spawn = room.find(FIND_MY_SPAWNS)[0];
+   // room
+   //    .find(FIND_MY_STRUCTURES, {
+   //       filter(s) {
+   //          return getPositionDistance(s.pos, spawn.pos) < 4;
+   //       },
+   //    })
+   //    .forEach((s) => {
+   //       room.visual.circle(s.pos.x, s.pos.y, {
+   //          fill: 'rgba(0, 255, 0, .5)',
+   //          radius: 0.5,
+   //       });
+   //    });
+
    allSpawnCreeps.forEach((creep) => {
       if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 100) {
-         // TODO go recycle / relive to spawn
-         // if (creep.carry.energy === 0) {
-         creep.say(`${creep.ticksToLive} aaAAaah`);
-         const spawn = creep.room.find(FIND_MY_SPAWNS)[0];
-         const container = spawn.room.find(FIND_MY_STRUCTURES, {
-            filter(s) {
-               return s.structureType === STRUCTURE_STORAGE;
-            },
-         })[0];
-         if (spawn) {
-            if (container) {
-               // container.getRangeTo(spawn)
-               // creep.moveTo(container.pos.x, container.pos.y);
-            } else {
-            }
-            creep.moveTo(spawn.pos.x, spawn.pos.y);
-            spawn.recycleCreep(creep);
-            // spawn.renewCreep(creep);
-         }
+         manageDyingCreep(room, creep);
          return;
-         // } else {
-         //    creep.say(`${creep.ticksToLive} aaAAaah`);
-         //    creep.memory.role = 'store';
-         // }
       }
 
       if (creep.memory.role === 'manual') {

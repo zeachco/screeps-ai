@@ -1,4 +1,4 @@
-import { log } from './utils';
+import { log, getPositionDistance } from './utils';
 import { ICreep, IRoom, DEFAULT_CREEP_MEMORY } from './types';
 import { MIN_CREEPS, MAX_CREEPS, BODY_PARTS_PRESET } from './config';
 
@@ -16,6 +16,38 @@ const creepFactory = (budget: number) => {
    }
    return parts;
 };
+
+function getBodyCost(creep: ICreep) {
+   return creep.body.reduce((acc, part) => {
+      return (acc += BODYPART_COST[part.type]);
+   }, 0);
+}
+
+export function manageDyingCreep(room: IRoom, creep: ICreep) {
+   creep.say(`${creep.ticksToLive} aaAAaah`);
+   const spawn = creep.room.find(FIND_MY_SPAWNS)[0];
+   const container = spawn.room.find(FIND_MY_STRUCTURES, {
+      filter(s) {
+         return (
+            s.structureType === STRUCTURE_STORAGE &&
+            getPositionDistance(s.pos, spawn.pos) < 2
+         );
+      },
+   })[0];
+   if (spawn) {
+      if (container) {
+         // TODO go recycle / relive to spawn
+         creep.moveTo(container.pos.x, container.pos.y);
+      } else {
+         creep.moveTo(spawn.pos.x, spawn.pos.y);
+      }
+      if (getBodyCost(creep) >= room.energyCapacityAvailable) {
+         spawn.renewCreep(creep);
+      } else {
+         spawn.recycleCreep(creep);
+      }
+   }
+}
 
 export function manageInventory(room: IRoom, creeps: ICreep[]) {
    const roomCapacityFull =

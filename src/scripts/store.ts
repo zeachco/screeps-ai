@@ -3,11 +3,15 @@ import { countCreepsByRole, moveToOptions } from '../utils';
 
 export const run = (creep: ICreep) => {
    const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: (s: StructureExtension) =>
-         s.isActive() && s.energyCapacity > 0 && s.energy < s.energyCapacity,
+      filter(s: StructureExtension) {
+         return (
+            s.isActive() && s.energyCapacity > 0 && s.energy < s.energyCapacity
+         );
+      },
    });
 
    // TODO prioritize by ENERGY_STRUCT_BY_NEEDS
+   // smaller inventory first
 
    if (target) {
       const atempt = creep.transfer(target, RESOURCE_ENERGY);

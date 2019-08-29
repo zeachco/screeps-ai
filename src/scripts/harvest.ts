@@ -1,4 +1,4 @@
-import { ICreep, IRoleConfig, IRunnerInjections } from '../types';
+import { ICreep, IRoleConfig } from '../types';
 import {
    doesCreepCan,
    moveToOptions,

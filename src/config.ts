@@ -7,8 +7,6 @@ import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
 import { ROLE_CLAIM } from './scripts/claim';
 
-// TODO Transfer everythin into the room or controller memory
-
 type TPowerStructures =
    | STRUCTURE_SPAWN
    | STRUCTURE_TOWER
