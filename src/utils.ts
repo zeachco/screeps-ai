@@ -128,3 +128,13 @@ export function prepareMemory<T>(
 
    return (obj as any) as T;
 }
+
+interface IPosition {
+   x: number;
+   y: number;
+}
+export function getPositionDistance(pos1: IPosition, pos2: IPosition) {
+   const dx = pos1.x - pos2.x;
+   const dy = pos1.y - pos2.y;
+   return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+}

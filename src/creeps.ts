@@ -54,19 +54,31 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
    );
 
    allSpawnCreeps.forEach((creep) => {
-      if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 75) {
+      if (typeof creep.ticksToLive === 'number' && creep.ticksToLive < 100) {
          // TODO go recycle / relive to spawn
-         if (creep.carry.energy === 0) {
-            creep.say(`${creep.ticksToLive} aaAAaah`);
-            creep.moveTo(20, 27);
-            Game.spawns.Spawn1.recycleCreep(creep);
-            // Game.spawns.Spawn1.renewCreep(creep);
-            return;
-         } else {
-            creep.say(`${creep.ticksToLive} aaAAaah`);
-            // creep.moveTo(20, 27);
-            creep.memory.role = 'store';
+         // if (creep.carry.energy === 0) {
+         creep.say(`${creep.ticksToLive} aaAAaah`);
+         const spawn = creep.room.find(FIND_MY_SPAWNS)[0];
+         const container = spawn.room.find(FIND_MY_STRUCTURES, {
+            filter(s) {
+               return s.structureType === STRUCTURE_STORAGE;
+            },
+         })[0];
+         if (spawn) {
+            if (container) {
+               // container.getRangeTo(spawn)
+               // creep.moveTo(container.pos.x, container.pos.y);
+            } else {
+            }
+            creep.moveTo(spawn.pos.x, spawn.pos.y);
+            spawn.recycleCreep(creep);
+            // spawn.renewCreep(creep);
          }
+         return;
+         // } else {
+         //    creep.say(`${creep.ticksToLive} aaAAaah`);
+         //    creep.memory.role = 'store';
+         // }
       }
 
       if (creep.memory.role === 'manual') {

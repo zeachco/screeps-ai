@@ -3,6 +3,7 @@ import {
    getCreepAvailableSpace,
    doesCreepCan,
    energySourceQualifiesForCreep,
+   getPositionDistance,
 } from './utils';
 import { ICreep } from './types';
 
@@ -54,4 +55,16 @@ test('doesCreepCan', () => {
    } as any;
    expect(doesCreepCan(creep, ['attack'])).toBe(true);
    expect(doesCreepCan(creep, ['work'])).toBe(false);
+});
+
+test('getPositionDistance', () => {
+   expect(getPositionDistance({ x: -3, y: 0 }, { x: 0, y: 0 })).toBe(3);
+   expect(getPositionDistance({ x: 0, y: 0 }, { x: 3, y: 4 })).toBe(5);
+   expect(getPositionDistance({ x: 0, y: 999 }, { x: 0, y: 993 })).toBe(6);
+   expect(getPositionDistance({ x: Infinity, y: 0 }, { x: 0, y: 0 })).toBe(
+      Infinity
+   );
+   expect(getPositionDistance({ x: -Infinity, y: 0 }, { x: 0, y: 0 })).toBe(
+      Infinity
+   );
 });

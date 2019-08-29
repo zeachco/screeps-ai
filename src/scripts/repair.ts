@@ -27,7 +27,7 @@ export const ROLE_REPAIR: IRoleConfig = {
    getPriority({ room }) {
       const repairables = room.find(FIND_STRUCTURES, {
          filter(s) {
-            return s.hits < s.hitsMax * 0.8 || s.hits < 1000;
+            return s.hits < s.hitsMax * 0.8 && s.hits < 1000;
          },
       });
       return repairables.length;
