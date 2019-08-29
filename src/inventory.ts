@@ -73,13 +73,17 @@ export function manageInventory(room: IRoom, creeps: ICreep[]) {
 
       const newName = `T${tier}_${room.memory.nextCreepId++}`;
 
-      const spawns = room.find(FIND_MY_SPAWNS, {
+      const spawn = room.find(FIND_MY_SPAWNS, {
          filter(spawn) {
             return !spawn.spawning;
          },
-      });
+      })[0];
 
-      const result = spawns[0].spawnCreep(body, newName, {
+      if (!spawn) {
+         return;
+      }
+
+      const result = spawn.spawnCreep(body, newName, {
          memory: DEFAULT_CREEP_MEMORY,
       });
 
