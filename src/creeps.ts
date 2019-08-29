@@ -4,34 +4,15 @@ import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
 import { manageDyingCreep } from './inventory';
 
-const findRole = (inject: IRunnerInjections): IRoleConfig => {
-   const sortedRoles = rolesDispatch.sort(
-      (a, b) => b.getPriority(inject) - a.getPriority(inject)
-   );
-   // log(
-   //    sortedRoles.map((r) => `${r.name}(${r.getPriority(inject)})`).join(', ')
-   // );
-   for (let i = 0; i < sortedRoles.length; i++) {
-      const newRole = sortedRoles[i];
-      if (newRole.shouldRun(inject)) {
-         return newRole;
-      }
-   }
-
-   return ROLE_IDLE;
-};
-
 export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
-   const creep: ICreep = {} as any;
-   const inj = { room, creep, creeps: [] };
    const sortedRoles = rolesDispatch.sort(
-      (a, b) => b.getPriority(inj) - a.getPriority(inj)
+      (a, b) => b.getPriority(room) - a.getPriority(room)
    );
    const ctrl = room.controller as StructureController;
 
    room.visual.text(
       sortedRoles
-         .map((r) => `${r.name.substr(0, 3)}${r.getPriority(inj)}`)
+         .map((r) => `${r.name.substr(0, 3)}${r.getPriority(room)}`)
          .join(', '),
       ctrl.pos.x + 1,
       ctrl.pos.y,
@@ -94,7 +75,20 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
 
       // Need a new role?
       if (role === ROLE_IDLE || role.shouldStop(inject)) {
-         role = findRole(inject);
+         const sortedRoles = rolesDispatch.sort(
+            (a, b) => b.getPriority(room) - a.getPriority(room)
+         );
+         // log(
+         //    sortedRoles.map((r) => `${r.name}(${r.getPriority(inject)})`).join(', ')
+         // );
+         for (let i = 0; i < sortedRoles.length; i++) {
+            const newRole = sortedRoles[i];
+            if (newRole.shouldRun(inject)) {
+               role = newRole;
+               break;
+            }
+         }
+
          creep.memory.role = role.name;
          if (role.onStart) {
             role.onStart(inject);

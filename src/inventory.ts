@@ -1,6 +1,12 @@
 import { log, getPositionDistance } from './utils';
 import { ICreep, IRoom, DEFAULT_CREEP_MEMORY } from './types';
-import { MIN_CREEPS, MAX_CREEPS, BODY_PARTS_PRESET } from './config';
+import {
+   MIN_CREEPS,
+   MAX_CREEPS,
+   BODY_PARTS_PRESET,
+   ROLES,
+   rolesDispatch,
+} from './config';
 
 const creepFactory = (budget: number) => {
    const parts: BodyPartConstant[] = [];
@@ -50,8 +56,17 @@ export function manageDyingCreep(room: IRoom, creep: ICreep) {
 }
 
 export function manageInventory(room: IRoom, creeps: ICreep[]) {
+   const spawn = room.find(FIND_MY_SPAWNS, {
+      filter(spawn) {
+         return !spawn.spawning;
+      },
+   })[0];
+   const maxCreepNb = Math.max(
+      MAX_CREEPS,
+      rolesDispatch.map((r) => r.getPriority(room)).length
+   );
    const roomCapacityFull =
-      creeps.length < MAX_CREEPS &&
+      creeps.length < maxCreepNb &&
       room.energyAvailable === room.energyCapacityAvailable;
 
    if (creeps.length < MIN_CREEPS || roomCapacityFull) {
@@ -72,12 +87,6 @@ export function manageInventory(room: IRoom, creeps: ICreep[]) {
       }
 
       const newName = `T${tier}_${room.memory.nextCreepId++}`;
-
-      const spawn = room.find(FIND_MY_SPAWNS, {
-         filter(spawn) {
-            return !spawn.spawning;
-         },
-      })[0];
 
       if (!spawn) {
          return;

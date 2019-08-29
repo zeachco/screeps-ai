@@ -39,11 +39,22 @@ export const findBestEnergySource = (creep: ICreep) => {
 
 const run = (creep: ICreep) => {
    // first pick decaying resources
-   const targets = creep.room.find(FIND_DROPPED_RESOURCES);
-   if (targets.length) {
-      if (creep.pickup(targets[0]) === ERR_NOT_IN_RANGE) {
-         creep.moveTo(targets[0], moveToOptions('#ffff00'));
+   const target = creep.room.find(FIND_DROPPED_RESOURCES)[0];
+   if (target) {
+      creep.say('mine!');
+      if (creep.pickup(target) === ERR_NOT_IN_RANGE) {
+         creep.moveTo(target, moveToOptions('#ffff00'));
       }
+      creep.room.visual.line(
+         creep.pos.x,
+         creep.pos.y,
+         target.pos.x,
+         target.pos.y,
+         {
+            color: 'rgba(255, 0, 128, 0.8)',
+            width: 0.3,
+         }
+      );
       return;
    }
 

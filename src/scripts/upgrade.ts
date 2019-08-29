@@ -20,7 +20,7 @@ export const ROLE_UPGRADE: IRoleConfig = {
       countCreepsByRole(creeps, 'upgrade') < creeps.length / 4 &&
       creep.carry.energy > 0,
    shouldStop: ({ creep }) => creep.carry.energy === 0,
-   getPriority({ room }) {
+   getPriority(room) {
       const ctrl = room.controller as StructureController;
       if (ctrl.level >= 8 || ctrl.upgradeBlocked) {
          return 0;

@@ -52,7 +52,7 @@ export interface IRoleConfig {
    onStart?: (injections: IRunnerInjections) => any;
    run: (creep: ICreep) => void;
    name: TRoleName;
-   getPriority: (injections: IRunnerInjections) => number;
+   getPriority: (room: IRoom) => number;
 }
 
 export const DEFAULT_CREEP_MEMORY = {

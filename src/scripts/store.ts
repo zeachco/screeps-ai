@@ -45,7 +45,7 @@ export const ROLE_STORE: IRoleConfig = {
       );
    },
    shouldStop: ({ creep }) => creep.carry.energy === 0,
-   getPriority({ room }) {
+   getPriority(room) {
       let score = 0;
       if (room.energyAvailable < 300) {
          score += 25;

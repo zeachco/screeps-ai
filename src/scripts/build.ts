@@ -24,7 +24,7 @@ export const ROLE_BUILD: IRoleConfig = {
       countCreepsByRole(creeps, 'build') < creeps.length / 3,
    shouldStop: ({ creep, room }) =>
       creep.carry.energy === 0 || !room.find(FIND_MY_CONSTRUCTION_SITES).length,
-   getPriority({ room }) {
+   getPriority(room) {
       return room.find(FIND_MY_CONSTRUCTION_SITES).length;
    },
 };
