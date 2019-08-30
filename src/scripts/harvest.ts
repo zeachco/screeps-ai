@@ -6,6 +6,9 @@ import {
    energySourceQualifiesForCreep,
    getCreepAvailableSpace,
    changeCreepRole,
+   random,
+   log,
+   getCreepUsedCargo,
 } from '../utils';
 
 export const findBestEnergySource = (creep: ICreep) => {
@@ -40,7 +43,7 @@ export const findBestEnergySource = (creep: ICreep) => {
 
 const run = (creep: ICreep) => {
    // first pick decaying resources
-   const target = creep.room.find(FIND_DROPPED_RESOURCES)[0];
+   const target = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
    if (target) {
       creep.say('mine!');
       if (creep.pickup(target) === ERR_NOT_IN_RANGE) {
@@ -59,6 +62,20 @@ const run = (creep: ICreep) => {
       return;
    }
 
+   // check bodies
+   // const tomb = creep.pos.findClosestByPath(FIND_TOMBSTONES);
+   // if (tomb && getCreepUsedCargo({ carry: tomb.store } as ICreep) > 0) {
+   //    creep.say('oh yeah!');
+   //    // if (creep.pickup(target) === ERR_NOT_IN_RANGE) {
+   //    creep.moveTo(tomb, moveToOptions('#ffff00'));
+   //    // }
+   //    creep.room.visual.line(creep.pos.x, creep.pos.y, tomb.pos.x, tomb.pos.y, {
+   //       color: 'rgba(255, 255, 128, 0.75)',
+   //       width: 0.4,
+   //    });
+   //    return;
+   // }
+
    // then get the reserves
    const sources = creep.room.find(FIND_SOURCES, {
       filter: (s) => s && s.energy > 0,
@@ -76,7 +93,13 @@ const run = (creep: ICreep) => {
 
    if (sources[selectIndex]) {
       if (creep.harvest(sources[selectIndex]) == ERR_NOT_IN_RANGE) {
-         creep.moveTo(sources[selectIndex], moveToOptions('#ffff00'));
+         if (
+            creep.moveTo(sources[selectIndex], moveToOptions('#ffff00')) ===
+            ERR_NO_PATH
+         ) {
+            creep.memory.targetSourceIndex = random(1);
+            creep.say(`...`);
+         }
       }
    }
 };
@@ -89,6 +112,10 @@ export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
    priority: 0,
    run,
+   onStart({ creep }) {
+      creep.memory.targetSourceIndex = random(1);
+      creep.say(`${creep.memory.targetSourceIndex} harvest`);
+   },
    // onStart: ({ creep }: IRunnerInjections) => creep,
    shouldRun({ creep }) {
       return (

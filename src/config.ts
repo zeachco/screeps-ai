@@ -26,7 +26,7 @@ export const MIN_STRUCTURE_HITS = 1000000;
 export const SHOW_ROLES = !true;
 export const CREEPS_PER_TIERS = 1;
 export const MIN_CREEPS = 3;
-export const MAX_CREEPS = 5;
+export const MAX_CREEPS = 8;
 
 const r = (part: BodyPartConstant, count: number) => {
    const parts: BodyPartConstant[] = [];

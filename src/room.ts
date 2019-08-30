@@ -20,16 +20,6 @@ export function manageRoom(gameRoom: Room) {
 
    rolesDispatch.forEach((role) => (role.priority = role.updatePriority(room)));
 
-   const localCreeps = (room.find(FIND_MY_CREEPS) as ICreep[]).filter(
-      (c: ICreep) => c.memory.role !== 'claim'
-   );
-   const claimers = getCreepsByRole(room, 'claim');
-   const allSpawnCreeps = [...localCreeps, ...claimers] as ICreep[];
-
-   creepRunner(room, allSpawnCreeps);
-   turretAI(room, allSpawnCreeps);
-   manageInventory(room, allSpawnCreeps);
-
    const sortedRoles = rolesDispatch.sort((a, b) => b.priority - a.priority);
 
    const ctrl = room.controller as StructureController;
@@ -44,34 +34,49 @@ export function manageRoom(gameRoom: Room) {
       }
    );
 
+   const textOptions: TextStyle = {
+      align: 'left',
+   };
+   const textRolesPriorities = sortedRoles
+      .map((r) => `${r.name.substr(0, 3)}${Math.round(r.priority)}`)
+      .join(', ');
+
+   const textRolesStats = sortedRoles
+      .filter((r) => room.memory.roles[r.name])
+      .map(
+         (r) =>
+            `${Object.keys(room.memory.roles[r.name]).length}${r.name.substr(
+               0,
+               3
+            )}`
+      )
+      .join(', ');
+
    room.visual.text(
-      sortedRoles
-         .map((r) => `${r.name.substr(0, 3)}${Math.round(r.priority)}`)
-         .join(', '),
+      textRolesPriorities,
       ctrl.pos.x + 1,
       ctrl.pos.y,
-      {
-         align: 'left',
-      }
+      textOptions
    );
 
    room.visual.text(
-      sortedRoles
-         .filter((r) => room.memory.roles[r.name])
-         .map(
-            (r) =>
-               `${Object.keys(room.memory.roles[r.name]).length}${r.name.substr(
-                  0,
-                  3
-               )}`
-         )
-         .join(', '),
+      textRolesStats,
       ctrl.pos.x + 1,
       ctrl.pos.y + 1,
-      {
-         align: 'left',
-      }
+      textOptions
    );
+
+   const localCreeps = (room.find(FIND_MY_CREEPS) as ICreep[]).filter(
+      (c: ICreep) => c.memory.role !== 'claim'
+   );
+   const claimers = getCreepsByRole(room, 'claim');
+   const allSpawnCreeps = [...localCreeps, ...claimers] as ICreep[];
+
+   creepRunner(room, allSpawnCreeps);
+   turretAI(room, allSpawnCreeps);
+   manageInventory(room, allSpawnCreeps);
+
+   log(textRolesPriorities, '\n', textRolesStats);
 
    // log(`Updating ${room.name} `, room.memory);
 }
