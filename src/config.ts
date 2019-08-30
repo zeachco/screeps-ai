@@ -7,7 +7,7 @@ import { ROLE_IDLE } from './scripts/idle';
 import { IRoleConfig, IRolesMap } from './types';
 import { ROLE_CLAIM } from './scripts/claim';
 
-type TPowerStructures =
+export type TPowerStructures =
    | STRUCTURE_SPAWN
    | STRUCTURE_TOWER
    | STRUCTURE_EXTENSION

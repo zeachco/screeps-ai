@@ -1,10 +1,11 @@
-import { ICreep, IRoleConfig } from '../types';
+import { ICreep, IRoleConfig, IRoom } from '../types';
 import {
    doesCreepCan,
    moveToOptions,
    createMapFromArray,
    energySourceQualifiesForCreep,
    getCreepAvailableSpace,
+   changeCreepRole,
 } from '../utils';
 
 export const findBestEnergySource = (creep: ICreep) => {
@@ -65,7 +66,7 @@ const run = (creep: ICreep) => {
    const selectIndex = creep.memory.targetSourceIndex;
 
    if (!sources.length) {
-      creep.memory.role = 'idle';
+      changeCreepRole(creep.room as IRoom, creep, 'idle');
       return;
    }
 

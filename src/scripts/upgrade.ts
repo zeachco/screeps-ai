@@ -25,7 +25,7 @@ export const ROLE_UPGRADE: IRoleConfig = {
       if (ctrl.level >= 8 || ctrl.upgradeBlocked) {
          return 0;
       }
-      const need = ctrl.ticksToDowngrade / ctrl.level < 100 ? 100 : 10;
-      return need / (room.memory.roles.upgrade.length || 1);
+      const need = ctrl.ticksToDowngrade / ctrl.level < 70000 ? 100 : 10;
+      return need / (Object.keys(room.memory.roles.upgrade).length || 1);
    },
 };

@@ -1,5 +1,5 @@
-import { ICreep, IRoleConfig, IRunnerInjections } from '../types';
-import { countCreepsByRole, moveToOptions } from '../utils';
+import { ICreep, IRoleConfig, IRunnerInjections, IRoom } from '../types';
+import { countCreepsByRole, moveToOptions, changeCreepRole } from '../utils';
 
 const run = (creep: ICreep) => {
    const closestSite = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES, {
@@ -11,7 +11,7 @@ const run = (creep: ICreep) => {
          creep.moveTo(closestSite, moveToOptions('#ff00ff'));
       }
    } else {
-      creep.memory.role = 'idle';
+      changeCreepRole(creep.room as IRoom, creep, 'idle');
    }
 };
 

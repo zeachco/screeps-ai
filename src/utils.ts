@@ -46,13 +46,30 @@ export function log(...arg: any[]) {
    );
 }
 
-export function clean() {
+export function clean(room: IRoom) {
    for (var name in Memory.creeps) {
       if (!Game.creeps[name]) {
          delete Memory.creeps[name];
          console.log('Clearing non-existing creep memory:', name);
       }
    }
+   for (var name in Memory.rooms) {
+      if (!Game.rooms[name]) {
+         delete Memory.rooms[name];
+         console.log('Clearing non-existing room memory:', name);
+      }
+   }
+
+   const { roles } = room.memory;
+   for (const name in roles) {
+      for (const cid in roles[name]) {
+         if (!getObjects<ICreep>([cid])[0]) {
+            log(`deleting ${cid} from role ${name}`);
+            delete roles[name][cid];
+         }
+      }
+   }
+   log(room.memory.roles);
 }
 
 export function findStructureAroundSpawn<T>(
@@ -116,7 +133,7 @@ export const getCreepAvailableSpace = (creep: ICreep): number =>
    creep.carryCapacity - getCreepUsedCargo(creep);
 
 export function getCreepsByRole(room: IRoom, role: TRoleName): ICreep[] {
-   return room.memory.roles[role]
+   return Object.keys(room.memory.roles[role])
       .map((id) => Game.getObjectById(id) as ICreep)
       .filter((creep) => !!creep && creep.memory.role === role);
 }
@@ -151,4 +168,14 @@ export function getPositionDistance(pos1: IPosition, pos2: IPosition) {
    const dx = pos1.x - pos2.x;
    const dy = pos1.y - pos2.y;
    return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+}
+
+export function changeCreepRole(
+   room: IRoom,
+   creep: ICreep,
+   newRole: TRoleName
+) {
+   delete room.memory.roles[creep.memory.role][creep.id];
+   room.memory.roles[newRole][creep.id] = creep.name;
+   creep.memory.role = newRole;
 }

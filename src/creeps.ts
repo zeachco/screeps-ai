@@ -1,39 +1,11 @@
-import { log } from './utils';
+import { log, changeCreepRole } from './utils';
 import { IRoleConfig, ICreep, IRunnerInjections, IRoom } from './types';
 import { ROLES, rolesDispatch, SHOW_ROLES } from './config';
 import { ROLE_IDLE } from './scripts/idle';
 import { manageDyingCreep } from './inventory';
 
 export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
-   const sortedRoles = rolesDispatch.sort(
-      (a, b) => b.getPriority(room) - a.getPriority(room)
-   );
-   const ctrl = room.controller as StructureController;
-
-   room.visual.text(
-      sortedRoles
-         .map((r) => `${r.name.substr(0, 3)}${r.getPriority(room)}`)
-         .join(', '),
-      ctrl.pos.x + 1,
-      ctrl.pos.y,
-      {
-         align: 'left',
-      }
-   );
-
-   room.visual.text(
-      sortedRoles
-         .filter((r) => room.memory.roles[r.name])
-         .map(
-            (r) => `${room.memory.roles[r.name].length}${r.name.substr(0, 3)}`
-         )
-         .join(', '),
-      ctrl.pos.x + 1,
-      ctrl.pos.y + 1,
-      {
-         align: 'left',
-      }
-   );
+   // log(room.memory.roles);
 
    // const spawn = room.find(FIND_MY_SPAWNS)[0];
    // room
@@ -59,7 +31,7 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
          return;
       }
       if (!creep.memory.role) {
-         creep.memory.role = 'idle';
+         changeCreepRole(room, creep, 'idle');
       }
       let role: IRoleConfig = ROLES[creep.memory.role];
 
@@ -89,7 +61,7 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
             }
          }
 
-         creep.memory.role = role.name;
+         changeCreepRole(room, creep, role.name);
          if (role.onStart) {
             role.onStart(inject);
          } else {
@@ -109,6 +81,7 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
                creep.say(`${creep.ticksToLive} ${creep.memory.role}`);
             }
             role.run(creep);
+            // changeCreepRole(room, creep, role.name);
          } else {
             throw 'Missing run script in config';
          }

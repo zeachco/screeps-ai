@@ -8,7 +8,7 @@ export type TRoleName =
    | 'claim'
    | 'repair';
 
-const idList = [] as string[];
+const idList = {} as { [key: string]: string };
 
 export const DEFAULT_ROOM_MEMORY = {
    energySources: ['unknown'] as string[],
@@ -23,7 +23,7 @@ export const DEFAULT_ROOM_MEMORY = {
       build: idList,
       claim: idList,
       idle: idList,
-   } as { [key: string]: string[] },
+   } as { [key: string]: { [key: string]: string } },
 };
 
 export interface IRoom extends Room {
