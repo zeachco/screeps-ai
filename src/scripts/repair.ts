@@ -17,14 +17,20 @@ const run = (creep: ICreep) => {
 
 export const ROLE_REPAIR: IRoleConfig = {
    name: 'repair',
+   priority: 0,
    run,
-   shouldRun: ({ creep, room, creeps }) =>
-      creep.carry.energy > 0 &&
-      room.find(FIND_MY_STRUCTURES, { filter: (s) => s.hits < s.hitsMax })
-         .length > 0 &&
-      countCreepsByRole(creeps, 'repair') < 1,
-   shouldStop: ({ creep }) => creep.carry.energy === 0,
-   getPriority(room) {
+   shouldRun({ creep, room, creeps }) {
+      return (
+         creep.carry.energy > 0 &&
+         room.find(FIND_MY_STRUCTURES, { filter: (s) => s.hits < s.hitsMax })
+            .length > 0 &&
+         countCreepsByRole(creeps, 'repair') < 1
+      );
+   },
+   shouldStop({ creep }) {
+      return creep.carry.energy === 0;
+   },
+   updatePriority(room) {
       const repairables = room.find(FIND_STRUCTURES, {
          filter(s) {
             return s.hits < s.hitsMax * 0.8 && s.hits < 1000;

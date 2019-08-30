@@ -63,18 +63,23 @@ const run = (creep: ICreep) => {
 
 export const ROLE_CLAIM: IRoleConfig = {
    name: 'claim',
+   priority: 0,
    run,
-   shouldRun: ({ creep, creeps }) =>
-      doesCreepCan(creep, [CLAIM]) &&
-      countCreepsByRole(creeps, 'claim') < 1 &&
-      creep.carry.energy > 200 &&
-      ttl(creep) > 800,
-   shouldStop: ({ creep, creeps }) =>
-      countCreepsByRole(creeps, 'claim') > 1 || ttl(creep) < 500,
+   shouldRun({ creep, creeps }) {
+      return (
+         doesCreepCan(creep, [CLAIM]) &&
+         countCreepsByRole(creeps, 'claim') < 1 &&
+         creep.carry.energy > 200 &&
+         ttl(creep) > 800
+      );
+   },
+   shouldStop({ creep, creeps }) {
+      return countCreepsByRole(creeps, 'claim') > 1 || ttl(creep) < 500;
+   },
    onStart({ creep, room }) {
       // TODO create path to next room
    },
-   getPriority() {
+   updatePriority() {
       return 0;
    },
 };

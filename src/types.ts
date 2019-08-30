@@ -22,7 +22,7 @@ export const DEFAULT_ROOM_MEMORY = {
       repair: idList,
       build: idList,
       claim: idList,
-      idle: idList,
+      // idle: idList,
    } as { [key: string]: { [key: string]: string } },
 };
 
@@ -52,7 +52,8 @@ export interface IRoleConfig {
    onStart?: (injections: IRunnerInjections) => any;
    run: (creep: ICreep) => void;
    name: TRoleName;
-   getPriority: (room: IRoom) => number;
+   priority: number;
+   updatePriority: (room: IRoom) => void;
 }
 
 export const DEFAULT_CREEP_MEMORY = {

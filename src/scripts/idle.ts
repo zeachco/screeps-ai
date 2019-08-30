@@ -6,10 +6,11 @@ const run = () => {
 
 export const ROLE_IDLE: IRoleConfig = {
    name: 'idle',
+   priority: 0,
    run,
    shouldRun: () => true,
    shouldStop: () => false,
-   getPriority() {
+   updatePriority() {
       return -1;
    },
 };

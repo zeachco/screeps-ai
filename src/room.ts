@@ -2,7 +2,7 @@ import { ICreep, IRoom, DEFAULT_ROOM_MEMORY } from './types';
 import { turretAI } from './role.turret';
 import { creepRunner } from './creeps';
 import { manageInventory } from './inventory';
-import { getCreepsByRole, prepareMemory, clean } from './utils';
+import { getCreepsByRole, prepareMemory, clean, log } from './utils';
 import { rolesDispatch } from './config';
 
 export function manageRoom(gameRoom: Room) {
@@ -17,7 +17,8 @@ export function manageRoom(gameRoom: Room) {
    const room = prepareMemory<IRoom>(gameRoom, DEFAULT_ROOM_MEMORY);
 
    clean(room);
-   // log(`Updating ${room.name} `, room.memory);
+
+   rolesDispatch.forEach((role) => role.updatePriority(room));
    const localCreeps = (room.find(FIND_MY_CREEPS) as ICreep[]).filter(
       (c: ICreep) => c.memory.role !== 'claim'
    );
@@ -28,9 +29,8 @@ export function manageRoom(gameRoom: Room) {
    turretAI(room, allSpawnCreeps);
    manageInventory(room, allSpawnCreeps);
 
-   const sortedRoles = rolesDispatch.sort(
-      (a, b) => b.getPriority(room) - a.getPriority(room)
-   );
+   const sortedRoles = rolesDispatch.sort((a, b) => b.priority - a.priority);
+
    const ctrl = room.controller as StructureController;
 
    room.visual.text(
@@ -45,7 +45,7 @@ export function manageRoom(gameRoom: Room) {
 
    room.visual.text(
       sortedRoles
-         .map((r) => `${r.name.substr(0, 3)}${Math.round(r.getPriority(room))}`)
+         .map((r) => `${r.name.substr(0, 3)}${Math.round(r.priority)}`)
          .join(', '),
       ctrl.pos.x + 1,
       ctrl.pos.y,
@@ -71,4 +71,6 @@ export function manageRoom(gameRoom: Room) {
          align: 'left',
       }
    );
+
+   // log(`Updating ${room.name} `, room.memory);
 }

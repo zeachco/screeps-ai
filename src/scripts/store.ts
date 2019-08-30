@@ -1,5 +1,10 @@
 import { ICreep, IRoleConfig, IRoom } from '../types';
-import { countCreepsByRole, moveToOptions, changeCreepRole } from '../utils';
+import {
+   countCreepsByRole,
+   moveToOptions,
+   changeCreepRole,
+   log,
+} from '../utils';
 
 export const run = (creep: ICreep) => {
    const targets = creep.room
@@ -14,8 +19,17 @@ export const run = (creep: ICreep) => {
       })
       .sort((a, b) => a.energy - b.energy);
 
-   // log(targets.map((t) => t.structureType));
-   const target = targets[0];
+   const target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+      filter(s: StructureExtension) {
+         return (
+            s.isActive() &&
+            s.energyCapacity > 0 &&
+            s.energy < s.energyCapacity &&
+            // get only the lowest enery
+            targets[0].energy === s.energy
+         );
+      },
+   });
 
    if (target) {
       const atempt = creep.transfer(target, RESOURCE_ENERGY);
@@ -29,6 +43,7 @@ export const run = (creep: ICreep) => {
 
 export const ROLE_STORE: IRoleConfig = {
    name: 'store',
+   priority: 0,
    run,
    shouldRun({ room, creeps, creep }) {
       return (
@@ -37,8 +52,10 @@ export const ROLE_STORE: IRoleConfig = {
             room.energyAvailable < room.energyCapacityAvailable)
       );
    },
-   shouldStop: ({ creep }) => creep.carry.energy === 0,
-   getPriority(room) {
+   shouldStop({ creep }) {
+      return creep.carry.energy === 0;
+   },
+   updatePriority(room) {
       let score = 1;
       if (room.energyAvailable < 300) {
          score += 25;

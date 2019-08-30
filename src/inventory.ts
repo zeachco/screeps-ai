@@ -1,4 +1,4 @@
-import { log, getPositionDistance } from './utils';
+import { log, getPositionDistance, changeCreepRole } from './utils';
 import { ICreep, IRoom, DEFAULT_CREEP_MEMORY } from './types';
 import {
    MIN_CREEPS,
@@ -30,6 +30,7 @@ function getBodyCost(creep: ICreep) {
 }
 
 export function manageDyingCreep(room: IRoom, creep: ICreep) {
+   changeCreepRole(room, creep, 'idle');
    creep.say(`${creep.ticksToLive} aaAAaah`);
    const spawn = creep.room.find(FIND_MY_SPAWNS)[0];
    const container = spawn.room.find(FIND_MY_STRUCTURES, {
@@ -63,7 +64,7 @@ export function manageInventory(room: IRoom, creeps: ICreep[]) {
    })[0];
    const maxCreepNb = Math.max(
       MAX_CREEPS,
-      rolesDispatch.map((r) => r.getPriority(room)).length
+      rolesDispatch.filter((r) => r.priority > 0).length
    );
    const roomCapacityFull =
       creeps.length < maxCreepNb &&

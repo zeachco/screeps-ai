@@ -52,8 +52,8 @@ const run = (creep: ICreep) => {
          target.pos.x,
          target.pos.y,
          {
-            color: 'rgba(255, 0, 128, 0.8)',
-            width: 0.3,
+            color: 'rgba(255, 255, 128, 0.75)',
+            width: 0.4,
          }
       );
       return;
@@ -87,6 +87,7 @@ interface IStats {
 
 export const ROLE_HARVEST: IRoleConfig = {
    name: 'harvest',
+   priority: 0,
    run,
    // onStart: ({ creep }: IRunnerInjections) => creep,
    shouldRun({ creep }) {
@@ -97,7 +98,7 @@ export const ROLE_HARVEST: IRoleConfig = {
    shouldStop({ creep }) {
       return !getCreepAvailableSpace(creep);
    },
-   getPriority() {
+   updatePriority() {
       return 0;
    },
 };

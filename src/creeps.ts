@@ -48,7 +48,7 @@ export const creepRunner = (room: IRoom, allSpawnCreeps: ICreep[]) => {
       // Need a new role?
       if (role === ROLE_IDLE || role.shouldStop(inject)) {
          const sortedRoles = rolesDispatch.sort(
-            (a, b) => b.getPriority(room) - a.getPriority(room)
+            (a, b) => b.priority - a.priority
          );
          // log(
          //    sortedRoles.map((r) => `${r.name}(${r.getPriority(inject)})`).join(', ')

@@ -15,17 +15,23 @@ const run = (creep: ICreep) => {
 
 export const ROLE_UPGRADE: IRoleConfig = {
    name: 'upgrade',
+   priority: 0,
    run,
-   shouldRun: ({ creep, creeps }) =>
-      countCreepsByRole(creeps, 'upgrade') < creeps.length / 4 &&
-      creep.carry.energy > 0,
-   shouldStop: ({ creep }) => creep.carry.energy === 0,
-   getPriority(room) {
+   shouldRun({ creep, creeps }) {
+      return (
+         countCreepsByRole(creeps, 'upgrade') < creeps.length / 4 &&
+         creep.carry.energy > 0
+      );
+   },
+   shouldStop({ creep }) {
+      return creep.carry.energy === 0;
+   },
+   updatePriority(room) {
       const ctrl = room.controller as StructureController;
       if (ctrl.level >= 8 || ctrl.upgradeBlocked) {
          return 0;
       }
-      const need = ctrl.ticksToDowngrade / ctrl.level < 70000 ? 100 : 10;
+      const need = ctrl.ticksToDowngrade / ctrl.level < 5000 ? 200 : 50;
       return need / (Object.keys(room.memory.roles.upgrade).length || 1);
    },
 };

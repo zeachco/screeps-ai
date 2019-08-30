@@ -75,5 +75,5 @@ export const BODY_PARTS_PRESET: BodyPartConstant[] = [
    CARRY,
    MOVE,
    CARRY,
-   CLAIM,
+   // CLAIM,
 ];

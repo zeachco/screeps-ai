@@ -60,16 +60,15 @@ export function clean(room: IRoom) {
       }
    }
 
-   const { roles } = room.memory;
-   for (const name in roles) {
-      for (const cid in roles[name]) {
-         if (!getObjects<ICreep>([cid])[0]) {
-            log(`deleting ${cid} from role ${name}`);
-            delete roles[name][cid];
-         }
-      }
-   }
-   log(room.memory.roles);
+   // const { roles } = room.memory;
+   // for (const name in roles) {
+   //    for (const cid in roles[name]) {
+   //       if (!getObjects<ICreep>([cid])[0]) {
+   //          log(`deleting ${cid} from role ${name}`);
+   //          delete roles[name][cid];
+   //       }
+   //    }
+   // }
 }
 
 export function findStructureAroundSpawn<T>(
@@ -176,6 +175,8 @@ export function changeCreepRole(
    newRole: TRoleName
 ) {
    delete room.memory.roles[creep.memory.role][creep.id];
-   room.memory.roles[newRole][creep.id] = creep.name;
+   if (newRole !== 'idle') {
+      room.memory.roles[newRole][creep.id] = creep.name;
+   }
    creep.memory.role = newRole;
 }
