@@ -47,11 +47,11 @@ export function manageDyingCreep(room: IRoom, creep: ICreep) {
       } else {
          creep.moveTo(spawn.pos.x, spawn.pos.y);
       }
-      if (getBodyCost(creep) >= room.energyCapacityAvailable) {
-         spawn.renewCreep(creep);
-      } else {
-         spawn.recycleCreep(creep);
-      }
+      // if (getBodyCost(creep) >= room.energyCapacityAvailable) {
+      //    spawn.renewCreep(creep);
+      // } else {
+      spawn.recycleCreep(creep);
+      // }
    }
 }
 
