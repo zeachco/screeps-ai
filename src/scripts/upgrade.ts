@@ -29,7 +29,7 @@ export const ROLE_UPGRADE: IRoleConfig = {
    updatePriority(room) {
       const ctrl = room.controller as StructureController;
       if (ctrl.level >= 8 || ctrl.upgradeBlocked) {
-         return 0;
+         return 1;
       }
       const need = ctrl.ticksToDowngrade / ctrl.level < 5000 ? 200 : 50;
       return need / (Object.keys(room.memory.roles.upgrade).length || 1);

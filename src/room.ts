@@ -18,7 +18,8 @@ export function manageRoom(gameRoom: Room) {
 
    clean(room);
 
-   rolesDispatch.forEach((role) => role.updatePriority(room));
+   rolesDispatch.forEach((role) => (role.priority = role.updatePriority(room)));
+
    const localCreeps = (room.find(FIND_MY_CREEPS) as ICreep[]).filter(
       (c: ICreep) => c.memory.role !== 'claim'
    );

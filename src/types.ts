@@ -53,7 +53,7 @@ export interface IRoleConfig {
    run: (creep: ICreep) => void;
    name: TRoleName;
    priority: number;
-   updatePriority: (room: IRoom) => void;
+   updatePriority: (room: IRoom) => number;
 }
 
 export const DEFAULT_CREEP_MEMORY = {

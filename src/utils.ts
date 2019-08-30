@@ -174,7 +174,9 @@ export function changeCreepRole(
    creep: ICreep,
    newRole: TRoleName
 ) {
-   delete room.memory.roles[creep.memory.role][creep.id];
+   if (creep.memory.role !== 'idle') {
+      delete room.memory.roles[creep.memory.role][creep.id];
+   }
    if (newRole !== 'idle') {
       room.memory.roles[newRole][creep.id] = creep.name;
    }
