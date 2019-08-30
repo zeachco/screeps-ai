@@ -76,7 +76,6 @@ export function manageRoom(gameRoom: Room) {
    turretAI(room, allSpawnCreeps);
    manageInventory(room, allSpawnCreeps);
 
-   log(textRolesPriorities, '\n', textRolesStats);
-
+   // log(textRolesPriorities, '\n', textRolesStats);
    // log(`Updating ${room.name} `, room.memory);
 }

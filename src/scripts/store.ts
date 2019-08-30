@@ -4,7 +4,13 @@ import {
    moveToOptions,
    changeCreepRole,
    log,
+   getCreepUsedCargo,
 } from '../utils';
+
+type TEnergyStructure =
+   | StructureExtension
+   | StructureContainer
+   | StructureTower;
 
 export const run = (creep: ICreep) => {
    const targets = creep.room
@@ -19,17 +25,32 @@ export const run = (creep: ICreep) => {
       })
       .sort((a, b) => a.energy - b.energy);
 
-   const target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-      filter(s: StructureExtension) {
-         return (
-            s.isActive() &&
-            s.energyCapacity > 0 &&
-            s.energy < s.energyCapacity &&
-            // get only the lowest enery
-            targets[0].energy === s.energy
-         );
-      },
-   });
+   const storeInContainerInstead =
+      getCreepUsedCargo(creep) > creep.carry.energy;
+
+   const target = creep.pos.findClosestByPath<TEnergyStructure>(
+      FIND_MY_STRUCTURES,
+      {
+         filter(s: TEnergyStructure) {
+            log(s.structureType);
+            switch (s.structureType) {
+               case STRUCTURE_CONTAINER:
+                  return storeInContainerInstead;
+               case STRUCTURE_TOWER:
+                  return s.energy < s.energyCapacity / 2;
+               default:
+                  return (
+                     s.isActive() &&
+                     s.structureType === STRUCTURE_EXTENSION &&
+                     s.energyCapacity > 0 &&
+                     s.energy < s.energyCapacity &&
+                     // get only the lowest enery
+                     targets[0].energy === s.energy
+                  );
+            }
+         },
+      }
+   );
 
    if (target) {
       const atempt = creep.transfer(target, RESOURCE_ENERGY);
