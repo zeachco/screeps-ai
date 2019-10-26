@@ -9,7 +9,10 @@ import {
 
 type TEnergyStructure =
    | StructureExtension
+   | StructureStorage
    | StructureContainer
+   | StructureSpawn
+   | StructureLink
    | StructureTower;
 
 export const run = (creep: ICreep) => {
@@ -29,16 +32,17 @@ export const run = (creep: ICreep) => {
       getCreepUsedCargo(creep) > creep.carry.energy;
 
    const target = creep.pos.findClosestByPath<TEnergyStructure>(
-      FIND_MY_STRUCTURES,
+      FIND_STRUCTURES,
       {
          filter(s: TEnergyStructure) {
-            log(s.structureType);
             switch (s.structureType) {
-               case STRUCTURE_CONTAINER:
+               case STRUCTURE_STORAGE:
+                  // log(s.structureType);
                   return storeInContainerInstead;
                case STRUCTURE_TOWER:
                   return s.energy < s.energyCapacity / 2;
-               default:
+               case STRUCTURE_EXTENSION:
+               case STRUCTURE_SPAWN:
                   return (
                      s.isActive() &&
                      s.structureType === STRUCTURE_EXTENSION &&
@@ -47,6 +51,9 @@ export const run = (creep: ICreep) => {
                      // get only the lowest enery
                      targets[0].energy === s.energy
                   );
+               default:
+                  // log(s.structureType);
+                  return false;
             }
          },
       }
