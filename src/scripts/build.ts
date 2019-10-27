@@ -26,6 +26,7 @@ export const ROLE_BUILD: IRoleConfig = {
    shouldStop: ({ creep, room }) =>
       creep.carry.energy === 0 || !room.find(FIND_MY_CONSTRUCTION_SITES).length,
    updatePriority(room) {
-      return room.find(FIND_MY_CONSTRUCTION_SITES).length;
+      const len = room.find(FIND_MY_CONSTRUCTION_SITES).length;
+      return len ? 50 + len : 0;
    },
 };
