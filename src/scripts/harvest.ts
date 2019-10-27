@@ -44,7 +44,7 @@ export const findBestEnergySource = (creep: ICreep) => {
 const run = (creep: ICreep) => {
    // first pick decaying resources
    const target = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
-   if (target) {
+   if (target && target.amount > 20) {
       creep.say('mine!');
       if (creep.pickup(target) === ERR_NOT_IN_RANGE) {
          creep.moveTo(target, moveToOptions('#ffff00'));
